@@ -1,0 +1,24 @@
+{
+  "name": "youcollector",
+  "version": "0.0.0",
+  "description": "YouCollector multi devices decentralised app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YouCollector/YouCollector.git"
+  },
+  "author": "David Hérault <dherault@gmail.com> (https://github.com/dherault)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YouCollector/YouCollector/issues"
+  },
+  "homepage": "https://github.com/YouCollector/YouCollector#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-dherault": "^1.6.0"
+  }
+}
