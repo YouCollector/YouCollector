@@ -15,7 +15,6 @@ export default function App() {
     <BlockchainServiceProvider>
       <ApplicationLayout>
         <Landing />
-        <StatusBar style="auto" />
       </ApplicationLayout>
     </BlockchainServiceProvider>
   )

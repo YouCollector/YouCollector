@@ -17,8 +17,19 @@
   },
   "homepage": "https://github.com/YouCollector/YouCollector#readme",
   "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.3",
+    "@nomiclabs/hardhat-etherscan": "^2.1.8",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
     "babel-eslint": "^10.1.0",
+    "chai": "^4.3.4",
+    "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
-    "eslint-config-dherault": "^1.6.0"
+    "eslint-config-dherault": "^1.6.0",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.2",
+    "hardhat": "^2.7.1",
+    "hardhat-gas-reporter": "^1.0.6",
+    "solhint": "^3.3.6",
+    "solidity-coverage": "^0.7.17"
   }
 }

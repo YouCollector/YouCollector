@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
+import Balance from '../Balance'
 
 import styles from './styles'
 
@@ -57,11 +58,14 @@ function WalletConnector() {
 
   if (blockchainService.userAddress) {
     return (
-      <Text
-        style={styles.metamask}
-      >
-        {blockchainService.userAddress}
-      </Text>
+      <View style={styles.row}>
+        <Text
+          style={styles.metamask}
+        >
+          {blockchainService.userAddress}
+        </Text>
+        <Balance />
+      </View>
     )
   }
 
