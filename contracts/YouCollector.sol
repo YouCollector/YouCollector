@@ -38,8 +38,8 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
     uint256 public slotMintingPrice = 0.333 * 10**18;
     uint256 public marketplaceItemMintingPrice = 0;
     uint256 public videoIdTransferPlatformFeeRatio = 5; // 5% // TODO setter
-    uint256 public videoIdTransferAuthorFeeRatio = 5; // 5% // TODO figure it out
-    uint256 public marketplaceItemMinimumBidTime = 1 * DAY; // TODO setter
+    uint256 public videoIdTransferAuthorFeeRatio = 5; // 5% // TODO figure it out, setter
+    uint256 public marketplaceItemMinimumBidTime = 1 * DAY;
     uint256 public marketplaceItemPagination = 4 * 12;
 
     struct Collection {
@@ -54,8 +54,8 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
 
     struct MarketplaceItem {
         string videoId;
-        address owner; // TODO prevent from bidding
-        address bidder;
+        address payable owner;
+        address payable bidder;
         uint256 price; // Direct buy price
         uint256 bid; // 0 if no bidding allowed
         uint256 bidCount;
@@ -94,7 +94,7 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
         GETTERS
     --- */
 
-    function getVideoInfo(string memory videoId) public view returns (address owner, address author,  uint256 collectionId, string memory collectionName, MarketplaceItem memory marketplaceItem) {
+    function getVideoIdInfo(string memory videoId) public view returns (address owner, address author,  uint256 collectionId, string memory collectionName, MarketplaceItem memory marketplaceItem) {
         require(bytes(videoId).length > 0, "videoId is empty!");
         require(videoIdToOwner[videoId] != address(0x0), "videoId does not exist!");
 
@@ -105,25 +105,48 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
         marketplaceItem = videoIdToMarketplaceItem[videoId];
     }
 
-    function getMarketplaceItems(uint256 skip, uint256 sort) public returns (MarketplaceItem[] memory marketplaceItems) {
+    function getCollections(address owner) public view returns (Collection[] memory collections) {
+        collections = ownerToCollections[owner];
+    }
+
+    function getMarketplaceItems(uint256 skip, uint256 sort) public view returns (MarketplaceItem[] memory marketplaceItems) {
         marketplaceItems = new MarketplaceItem[](marketplaceItemPagination);
+        uint256 passCount = 0;
 
         if (sort == SORT_CREATED_DESC) {
             // TODO optimize with variable
-            for (uint256 i = marketplaceItemsByDate.length - skip - 1; i >= marketplaceItemsByDate.length - skip - marketplaceItemPagination - 1; i--) {
-                if (marketplaceItemsByDate[i] == address(0x0)) {
-                    i++;
+            for (uint256 i = marketplaceItemsByDate.length - skip - 1; i >= marketplaceItemsByDate.length - skip - marketplaceItemPagination - passCount - 1; i--) {
+                if (marketplaceItemsByDate[i].endDate > block.timestamp) {
+                    passCount++;
+
                     continue;
                 }
+
+                marketplaceItems[marketplaceItemPagination - i + passCount] = marketplaceItemsByDate[i];
             }
+
             return marketplaceItems;
-        } else if (sort == SORT_CREATED_DESC) {
+        }
+        else if (sort == SORT_CREATED_DESC) {
+            for (uint256 i = skip; i < marketplaceItemPagination + passCount; i++) {
+                if (marketplaceItemsByDate[i].endDate > block.timestamp) {
+                    passCount++;
+
+                    continue;
+                }
+
+                marketplaceItems[i - passCount] = marketplaceItemsByDate[i];
+            }
+
             return marketplaceItems;
-        } else if (sort == SORT_PRICE_ASC) {
-            return marketplaceItems;
-        } else if (sort == SORT_PRICE_DESC) {
-            return marketplaceItems;
-        } else {
+        }
+        // else if (sort == SORT_PRICE_ASC) {
+        //     return marketplaceItems;
+        // }
+        // else if (sort == SORT_PRICE_DESC) {
+        //     return marketplaceItems;
+        // }
+        else {
             revert("Invalid sort!");
         }
     }
@@ -263,8 +286,8 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
 
         MarketplaceItem memory marketplaceItem = MarketplaceItem(
             videoId,
-            msg.sender,
-            address(0x0),
+            payable(msg.sender),
+            payable(address(0x0)),
             price,
             bid,
             0,
@@ -275,7 +298,7 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
 
         marketplaceItemsByDate.push(marketplaceItem);
         marketplaceItemsByPrice.push(marketplaceItem);
-        _sortMarketplaceItemsByPrice(marketplaceItemsByPrice); // Should use min(price, bid) and fill holes
+        _sortMarketplaceItemsByPrice(marketplaceItemsByPrice); // Should use min(price, bid) and fill holes // TODO decide if kept here
         videoIdToMarketplaceItem[videoId] = marketplaceItem;
         creatorAddress.transfer(msg.value);
     }
@@ -319,12 +342,34 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
         MARKETPLACE
     --- */
 
+    function bidVideoId(string memory videoId) public payable {
+        MarketplaceItem storage marketplaceItem = videoIdToMarketplaceItem[videoId];
+
+        require(marketplaceItem.owner != msg.sender, "Bidder should not be the owner of this videoId!");
+        require(marketplaceItem.endDate > block.timestamp, "Bidding is closed!");
+        require(marketplaceItem.bid < msg.value, "You should bid a higger amount than the current bid!");
+
+        marketplaceItem.bidder.transfer(marketplaceItem.bid); // Refund previous bidder
+        marketplaceItem.bid = msg.value;
+        marketplaceItem.bidder = payable(msg.sender);
+        marketplaceItem.bidDate = block.timestamp;
+    }
+
+    function claimVideoId(string memory videoId) public payable {
+        MarketplaceItem storage marketplaceItem = videoIdToMarketplaceItem[videoId];
+
+        require(marketplaceItem.bidder == msg.sender, "Claiming is reserved to the highest bidder!");
+        require(marketplaceItem.endDate < block.timestamp, "Bidding should be closed!");
+
+        marketplaceItem.owner.transfer(marketplaceItem.bid);
+        // TODO
+    }
 
     /* ---
         DONATION
     --- */
 
-    function donate() public payable returns (string memory){
+    function donate() public payable returns (string memory) {
         creatorAddress.transfer(msg.value);
 
         return "Thank you for your donation!";
@@ -366,7 +411,6 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
         //         swap a[k,k-1]
         //     → invariant: a[1..i] is sorted
         // end
-
     }
 
     /* ---

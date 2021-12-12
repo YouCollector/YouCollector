@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "npx hardhat test",
+    "dev": "npm run hardhat:compile && npx hardhat size-contracts",
+    "hardhat:compile": "npx hardhat compile",
+    "hardhat:size": "npx hardhat size-contracts",
     "hardhat:accounts": "npx hardhat accounts",
     "hardhat:deploy": "npx hardhat run ./scripts/deploy.js"
   },
@@ -31,6 +34,7 @@
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.2",
     "hardhat": "^2.7.1",
+    "hardhat-contract-sizer": "^2.1.1",
     "hardhat-gas-reporter": "^1.0.6",
     "solhint": "^3.3.6",
     "solidity-coverage": "^0.7.17"

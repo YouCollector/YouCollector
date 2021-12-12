@@ -3,9 +3,9 @@ const { ethers } = require('hardhat')
 
 describe('YouCollector', () => {
   it("Should return the new greeting once it's changed", async () => {
-    const YouCollector = await ethers.getContractFactory('YouCollector')
-    const greeter = await YouCollector.deploy('Hello, world!')
-    await greeter.deployed()
+    // const YouCollector = await ethers.getContractFactory('YouCollector')
+    // const greeter = await YouCollector.deploy('Hello, world!')
+    // await greeter.deployed()
 
     // expect(await greeter.greet()).to.equal('Hello, world!')
 
