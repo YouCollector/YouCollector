@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npx hardhat test",
     "start:watch": "nodemon --watch contracts --watch .hardhat.config.js --watch package.json -e sol --exec \"npm run dev\"",
-    "dev": "npm run hardhat:compile && npx hardhat size-contracts",
+    "dev": "npm run hardhat:compile",
+    "hardhat:clean": "rm -rf artifacts cache",
     "hardhat:compile": "npx hardhat compile",
     "hardhat:size": "npx hardhat size-contracts",
     "hardhat:accounts": "npx hardhat accounts",
