@@ -257,7 +257,7 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
     function mintVideoId(string memory videoId, uint256 collectionId) public payable {
         require(bytes(videoId).length > 0, "videoId is empty!");
         require(collectionId <= _currentCollectionId, "collectionId is not valid!");
-        require(videoIdToOwner[videoId] != address(0x0), "Video already minted!");
+        require(videoIdToOwner[videoId] == address(0x0), "Video already minted!");
 
         int256 collectionIndex = _getCollectionIndex(ownerToCollections[msg.sender], collectionId);
 
