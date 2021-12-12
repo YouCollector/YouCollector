@@ -6,13 +6,16 @@ module.exports = {
     node: true,
   },
   extends: [
-    "dherault",
+    'dherault',
   ],
-  "parser": "babel-eslint",
+  parser: 'babel-eslint',
   overrides: [
     {
-      files: ["hardhat.config.js"],
+      files: ['hardhat.config.js'],
       globals: { task: true },
     },
   ],
-};
+  rules: {
+    'import/no-extraneous-dependencies': 'off',
+  },
+}
