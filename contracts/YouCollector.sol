@@ -8,17 +8,28 @@ import "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155Burn
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155SupplyUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
+//TODO write events
+//TODO write upgrade logic
+//TODO optimize for gas
+//TODO follow users and favorite videos
+//TODO list top users
+//TODO save video market value
 /// @custom:security-contact hi@youcollector.art
 contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgradeable, PausableUpgradeable, ERC1155BurnableUpgradeable, ERC1155SupplyUpgradeable {
     bytes32 public constant URI_SETTER_ROLE = keccak256("URI_SETTER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
-    uint public constant DAY = 24 * 60 * 60;
+    uint256 public constant DAY = 24 * 60 * 60;
 
     uint256 public constant VIDEO_ID_ID = 0;
     uint256 public constant COLLECTION_ID = 1;
     uint256 public constant SLOT_ID = 2;
     uint256 public constant MARKETPLACE_ITEM_ID = 2;
+
+    uint256 public constant SORT_CREATED_ASC = 0;
+    uint256 public constant SORT_CREATED_DESC = 1;
+    uint256 public constant SORT_PRICE_ASC = 2;
+    uint256 public constant SORT_PRICE_DESC = 3;
 
     address payable private creatorAddress;
 
@@ -26,9 +37,10 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
     uint256 public collectionMintingPrice = 1 * 10**18;
     uint256 public slotMintingPrice = 0.333 * 10**18;
     uint256 public marketplaceItemMintingPrice = 0;
-    uint public videoIdTransferPlatformFeeRatio = 5; // 5% // TODO setter
-    uint public videoIdTransferAuthorFeeRatio = 5; // 5% // TODO figure it out
-    uint public marketplaceItemMinimumBidTime = 1 * DAY; // TODO setter
+    uint256 public videoIdTransferPlatformFeeRatio = 5; // 5% // TODO setter
+    uint256 public videoIdTransferAuthorFeeRatio = 5; // 5% // TODO figure it out
+    uint256 public marketplaceItemMinimumBidTime = 1 * DAY; // TODO setter
+    uint256 public marketplaceItemPagination = 4 * 12;
 
     struct Collection {
         uint256 id;
@@ -41,26 +53,25 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
     string public newCollectionName = "My Collection";
 
     struct MarketplaceItem {
-        uint256 id;
-        address owner; // TODO prevent from bidding
         string videoId;
+        address owner; // TODO prevent from bidding
+        address bidder;
         uint256 price; // Direct buy price
         uint256 bid; // 0 if no bidding allowed
-        address bidder;
-        int bidCount;
-        uint bidDate; // 0 if no bidder
-        uint endDate; // 0 if direct buy
+        uint256 bidCount;
+        uint256 bidDate; // 0 if no bidder
+        uint256 startDate; // 0 if direct buy
+        uint256 endDate; // 0 if direct buy
     }
-    uint256 private _currentMarketplaceItemId = 0; // id generator
 
-    mapping (address => uint) public userToRegistrationDate;
+    mapping (address => uint256) public userToRegistrationDate;
     mapping (address => Collection[]) public ownerToCollections;
     mapping (string => address) public videoIdToOwner;
     mapping (string => address) public videoIdToAuthor;
     mapping (string => uint256) public videoIdToCollectionId;
-    uint256[] public marketplaceItemIds;
+    MarketplaceItem[] public marketplaceItemsByDate;
+    MarketplaceItem[] public marketplaceItemsByPrice;
     mapping (string => MarketplaceItem) public videoIdToMarketplaceItem;
-    mapping (uint256 => MarketplaceItem) public marketplaceItemsIdToMarketplaceItem;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() initializer {}
@@ -83,15 +94,70 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
         GETTERS
     --- */
 
-    function getVideoInfo(string memory videoId) public view returns (address owner, address author,  uint256 collectionId, string memory collectionName, MarketplaceItem marketplaceItem) {
+    function getVideoInfo(string memory videoId) public view returns (address owner, address author,  uint256 collectionId, string memory collectionName, MarketplaceItem memory marketplaceItem) {
         require(bytes(videoId).length > 0, "videoId is empty!");
-        require(videoIdToOwner[videoId] != 0, "videoId does not exist!");
+        require(videoIdToOwner[videoId] != address(0x0), "videoId does not exist!");
 
         owner = videoIdToOwner[videoId];
         author = videoIdToAuthor[videoId];
         collectionId = videoIdToCollectionId[videoId];
         collectionName = ownerToCollections[owner][collectionId].name;
         marketplaceItem = videoIdToMarketplaceItem[videoId];
+    }
+
+    function getMarketplaceItems(uint256 skip, uint256 sort) public returns (MarketplaceItem[] memory marketplaceItems) {
+        marketplaceItems = new MarketplaceItem[](marketplaceItemPagination);
+
+        if (sort == SORT_CREATED_DESC) {
+            // TODO optimize with variable
+            for (uint256 i = marketplaceItemsByDate.length - skip - 1; i >= marketplaceItemsByDate.length - skip - marketplaceItemPagination - 1; i--) {
+                if (marketplaceItemsByDate[i] == address(0x0)) {
+                    i++;
+                    continue;
+                }
+            }
+            return marketplaceItems;
+        } else if (sort == SORT_CREATED_DESC) {
+            return marketplaceItems;
+        } else if (sort == SORT_PRICE_ASC) {
+            return marketplaceItems;
+        } else if (sort == SORT_PRICE_DESC) {
+            return marketplaceItems;
+        } else {
+            revert("Invalid sort!");
+        }
+    }
+
+    /* ---
+        SETTERS
+    --- */
+
+    function setVideoIdMintingPrice(uint256 newPrice) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        videoIdMintingPrice = newPrice;
+    }
+
+    function setCollectionMintingPrice(uint256 newPrice) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        collectionMintingPrice = newPrice;
+    }
+
+    function setSlotMintingPrice(uint256 newPrice) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        slotMintingPrice = newPrice;
+    }
+
+    function setNewCollectionSlots(uint256 newSlots) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        newCollectionSlots = newSlots;
+    }
+
+    function setMarketplaceItemMintingPrice(uint256 newMarketplaceItemMintingPrice) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        marketplaceItemMintingPrice = newMarketplaceItemMintingPrice;
+    }
+
+    function setMarketplaceItemMinimumBidTime(uint256 newMarketplaceItemMinimumBidTime) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        marketplaceItemMinimumBidTime = newMarketplaceItemMinimumBidTime;
+    }
+
+    function setMarketplaceItemPagination(uint256 newMarketplaceItemPagination) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        marketplaceItemPagination = newMarketplaceItemPagination;
     }
 
     /* ---
@@ -102,7 +168,7 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
         require(userToRegistrationDate[msg.sender] == 0, "User already registered");
         require(videoIds.length <= newCollectionSlots, "To many videoIds to mint!");
 
-        for (uint i = 0; i < videoIds.length; i++) {
+        for (uint256 i = 0; i < videoIds.length; i++) {
             require(bytes(videoIds[i]).length > 0, "videoIds contains an empty string");
         }
 
@@ -111,7 +177,7 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
 
         _mint(msg.sender, VIDEO_ID_ID, videoIds.length, "");
 
-        for (uint i = 0; i < videoIds.length; i++) {
+        for (uint256 i = 0; i < videoIds.length; i++) {
             videoIdToCollectionId[videoIds[i]] = collectionId;
         }
 
@@ -186,13 +252,31 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
         creatorAddress.transfer(msg.value);
     }
 
-    function mintMarketplaceItem(string memory videoId, uint256 price, uint256 bid, uint bidEndDate) public payable {
+    function mintMarketplaceItem(string memory videoId, uint256 price, uint256 bid, uint256 bidEndDate) public payable {
         require(bytes(videoId).length > 0, "videoId is empty!");
         require(videoIdToOwner[videoId] == msg.sender, "User does not own this video!");
         require(price > 0, "price must be greater than 0!");
-        require(bidEndDate > block.timestamp, "bidEndDate must be greater than current block timestamp!");
+        require(bidEndDate > block.timestamp + marketplaceItemMinimumBidTime, "bidEndDate must be greater than current block timestamp + marketplaceItemMinimumBidTime!");
+        require(msg.value >= marketplaceItemMintingPrice, "Not enought value was sent to mint a marketplace item!");
 
+        _mint(msg.sender, MARKETPLACE_ITEM_ID, 1, "");
 
+        MarketplaceItem memory marketplaceItem = MarketplaceItem(
+            videoId,
+            msg.sender,
+            address(0x0),
+            price,
+            bid,
+            0,
+            0,
+            block.timestamp,
+            bidEndDate
+        );
+
+        marketplaceItemsByDate.push(marketplaceItem);
+        marketplaceItemsByPrice.push(marketplaceItem);
+        _sortMarketplaceItemsByPrice(marketplaceItemsByPrice); // Should use min(price, bid) and fill holes
+        videoIdToMarketplaceItem[videoId] = marketplaceItem;
         creatorAddress.transfer(msg.value);
     }
 
@@ -228,30 +312,13 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
 
         require(unsignedNewIndex < ownerToCollections[msg.sender].length, "New index is out of bounds!");
 
-        Collection memory swapCollection = ownerToCollections[msg.sender][unsignedNewIndex];
-        ownerToCollections[msg.sender][unsignedNewIndex] = ownerToCollections[msg.sender][unsignedIndex];
-        ownerToCollections[msg.sender][unsignedIndex] = swapCollection;
+        (ownerToCollections[msg.sender][unsignedNewIndex], ownerToCollections[msg.sender][unsignedIndex]) = (ownerToCollections[msg.sender][unsignedIndex], ownerToCollections[msg.sender][unsignedNewIndex]);
     }
 
     /* ---
         MARKETPLACE
     --- */
 
-    function getMarketplaceItems(uint sort, uint skip) public returns (MarketplaceItem[] memory) {
-
-    }
-
-    function sellVideoId(string memory videoId, uint256 price, uint256 bid, uint bidEndDate) public {
-        require(bytes(videoId).length > 0, "videoId is empty!");
-        require(videoIdToOwner[videoId] == msg.sender, "User does not own this video!");
-
-        if (videoIdToMarketplaceItem[videoId] == 0) {
-            _mint(msg.sender, MARKETPLACE_ITEM_ID, 1, "");
-
-            MarketplaceItem memory marketplaceItem = MarketplaceItem();
-            videoIdToMarketplaceItem[videoId] = ;
-        }
-    }
 
     /* ---
         DONATION
@@ -279,22 +346,6 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
         _unpause();
     }
 
-    function setVideoIdMintingPrice(uint256 newPrice) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        videoIdMintingPrice = newPrice;
-    }
-
-    function setCollectionMintingPrice(uint256 newPrice) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        collectionMintingPrice = newPrice;
-    }
-
-    function setSlotMintingPrice(uint256 newPrice) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        slotMintingPrice = newPrice;
-    }
-
-    function setNewCollectionSlots(uint256 newSlots) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        newCollectionSlots = newSlots;
-    }
-
     /* ---
         HELPERS
     --- */
@@ -307,6 +358,15 @@ contract YouCollector is Initializable, ERC1155Upgradeable, AccessControlUpgrade
         }
 
         return -1;
+    }
+
+    function _sortMarketplaceItemsByPrice(MarketplaceItem[] storage marketplaceItems) internal {
+        // for i = 2:n,
+        //     for (k = i; k > 1 and a[k] < a[k-1]; k--)
+        //         swap a[k,k-1]
+        //     → invariant: a[1..i] is sorted
+        // end
+
     }
 
     /* ---
