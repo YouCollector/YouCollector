@@ -1,15 +1,16 @@
 import React, { useContext, useState } from 'react'
-import { Text, View } from 'react-native'
+import { Button, Pressable, Text, VStack } from 'native-base'
+import { useNavigation } from '@react-navigation/native'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 import Balance from '../Balance'
-
-import styles from './styles'
+import shortenAddress from '../../utils/shortenAddress'
 
 function WalletConnector() {
   const blockchainService = useContext(BlockchainServiceContext)
   const [loading, setLoading] = useState(false)
   const [hasMetamask, setHasMetamask] = useState(true)
+  const navigation = useNavigation()
 
   async function handleMetamaskPress() {
     const hasMetamask = window.ethereum?.isMetaMask
@@ -58,24 +59,23 @@ function WalletConnector() {
 
   if (blockchainService.userAddress) {
     return (
-      <View style={styles.row}>
-        <Text
-          style={styles.metamask}
-        >
-          {blockchainService.userAddress}
-        </Text>
-        <Balance />
-      </View>
+      <Pressable onPress={() => navigation.navigate('User', { address: blockchainService.userAddress })}>
+        <VStack alignItems="flex-end">
+          <Text>
+            {shortenAddress(blockchainService.userAddress)}
+          </Text>
+          <Balance />
+        </VStack>
+      </Pressable>
     )
   }
 
   return (
-    <Text
+    <Button
       onPress={handleMetamaskPress}
-      style={styles.metamask}
     >
-      Connect to MetaMask {loading ? '...' : ''} {hasMetamask ? '' : 'Not found'}
-    </Text>
+      Connect to MetaMask
+    </Button>
   )
 }
 

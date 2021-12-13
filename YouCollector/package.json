@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@ethersproject/shims": "^5.5.0",
+    "@react-navigation/elements": "^1.2.1",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
     "ethers": "^5.5.2",

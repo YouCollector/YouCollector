@@ -1,14 +1,14 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
-import { Button } from 'native-base'
+import { Box, Button, Text, VStack } from 'native-base'
+import { MaterialIcons } from '@expo/vector-icons'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
-
-import styles from './styles'
 
 function User({ navigation, route }) {
   const [videoIds, setVideoIds] = useState([])
   const blockchainService = useContext(BlockchainServiceContext)
+
+  const isViewer = route.params.address === blockchainService.userAddress
 
   const getUserVideosIds = useCallback(async () => {
     const videoIds = await blockchainService.youCollector.getUserInfo(route.params.address)
@@ -21,10 +21,29 @@ function User({ navigation, route }) {
   }, [getUserVideosIds])
 
   return (
-    <View style={styles.container}>
-      <Text>User {route.params.address}</Text>
-      <Text>{videoIds}</Text>
-    </View>
+    <Box
+      backgroundColor="white"
+      flex={1}
+      p="4"
+    >
+      {isViewer && (
+        <Box alignItems="end">
+          <Button
+            leftIcon={(
+              <MaterialIcons
+                name="add"
+                size={16}
+                color="white"
+              />
+            )}
+          >
+            Mint a video
+          </Button>
+        </Box>
+      )}
+      <Text>{route.params.address}</Text>
+      <VStack>{videoIds}</VStack>
+    </Box>
   )
 }
 

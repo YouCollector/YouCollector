@@ -131,7 +131,7 @@ contract YouCollector is Ownable {
 
     function mintVideoId(string memory videoId) external payable {
         require(videoIdToOwner[videoId] == address(0x0));
-        require(msg.value >= videoIdMintingPrice);
+        require(ownerToVideoIds[msg.sender].length <= YouCollectorLibrary.REGISTER_MAX_VIDEOS || msg.value >= videoIdMintingPrice);
 
         videoIdToOwner[videoId] = msg.sender;
         ownerToVideoIds[msg.sender].push(videoId);

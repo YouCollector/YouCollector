@@ -24,7 +24,7 @@ function BlockchainServiceProvider({ children }) {
 
       const balance = await provider.getBalance(userAddress)
 
-      return ethers.utils.formatEther(balance)
+      return parseFloat(ethers.utils.formatEther(balance))
     }
 
     let transactionCount = 0

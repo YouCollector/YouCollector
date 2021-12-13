@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
-import { ethers } from 'ethers'
+import { Image } from 'react-native'
+import { HStack, Text } from 'native-base'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
@@ -15,9 +15,14 @@ function Balance() {
   useEffect(updateBalance, [updateBalance, blockchainService.userAddress, blockchainService.transactionCount])
 
   return (
-    <View>
-      <Text>Balance: {balance}</Text>
-    </View>
+    <HStack alignItems="center">
+      <Image
+        source={require('../../assets/matic-token-icon.webp')}
+        fadeDuration={0}
+        style={{ width: 24, height: 24 }}
+      />
+      <Text marginLeft="1">{balance.toFixed(4)}</Text>
+    </HStack>
   )
 }
 

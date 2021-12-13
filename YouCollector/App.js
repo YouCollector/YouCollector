@@ -7,7 +7,10 @@ import { NativeBaseProvider } from 'native-base'
 import 'react-native-get-random-values'
 import '@ethersproject/shims'
 
+import shortenAddress from './utils/shortenAddress'
+
 import BlockchainServiceProvider from './components/BlockchainServiceProvider'
+import Header from './components/Header'
 
 import Landing from './scenes/Landing'
 import Register from './scenes/Register'
@@ -21,7 +24,12 @@ export default function App() {
       <NativeBaseProvider>
         <StatusBar style="auto" />
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Landing">
+          <Stack.Navigator
+            initialRouteName="Landing"
+            screenOptions={{
+              header: Header,
+            }}
+          >
             <Stack.Screen
               name="Landing"
               component={Landing}
@@ -35,7 +43,7 @@ export default function App() {
             <Stack.Screen
               name="User"
               component={User}
-              options={{ title: 'User' }}
+              options={({ route }) => ({ title: shortenAddress(route.params.address) })}
             />
           </Stack.Navigator>
         </NavigationContainer>
