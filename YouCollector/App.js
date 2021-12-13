@@ -15,6 +15,7 @@ import Header from './components/Header'
 import Landing from './scenes/Landing'
 import Register from './scenes/Register'
 import User from './scenes/User'
+import Mint from './scenes/Mint'
 
 const Stack = createNativeStackNavigator()
 
@@ -44,6 +45,11 @@ export default function App() {
               name="User"
               component={User}
               options={({ route }) => ({ title: shortenAddress(route.params.address) })}
+            />
+            <Stack.Screen
+              name="Mint"
+              component={Mint}
+              options={{ title: 'Mint video' }}
             />
           </Stack.Navigator>
         </NavigationContainer>

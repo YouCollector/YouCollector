@@ -36,6 +36,7 @@ function User({ navigation, route }) {
                 color="white"
               />
             )}
+            onPress={() => navigation.navigate('Mint')}
           >
             Mint a video
           </Button>
