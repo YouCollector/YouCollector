@@ -52,7 +52,7 @@ function WalletConnector() {
       ],
     })
 
-    blockchainService.update(userAddress)
+    blockchainService.setUserAddress(userAddress)
 
     setLoading(false)
   }

@@ -10,30 +10,30 @@ function Header({ navigation, route, options, back }) {
   const title = getHeaderTitle(options, route.name)
 
   return (
-    <Box
+    <HStack
+      alignItems="center"
       p="4"
+      minHeight="76px"
       borderBottomWidth="1"
       borderBottomColor="gray.200"
       backgroundColor="white"
     >
-      <HStack alignItems="center">
-        {!!back && (
-          <Box mr="2">
-            <MaterialCommunityIcons
-              name="arrow-left"
-              size={24}
-              color="black"
-              onPress={navigation.goBack}
-            />
-          </Box>
-        )}
-        <Heading>
-          {title}
-        </Heading>
-        <Box flexGrow={1} />
-        <WalletConnector />
-      </HStack>
-    </Box>
+      {!!back && (
+        <Box mr="2">
+          <MaterialCommunityIcons
+            name="arrow-left"
+            size={24}
+            color="black"
+            onPress={navigation.goBack}
+          />
+        </Box>
+      )}
+      <Heading>
+        {title}
+      </Heading>
+      <Box flexGrow={1} />
+      <WalletConnector />
+    </HStack>
   )
 }
 

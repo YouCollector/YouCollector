@@ -8,17 +8,12 @@ const path = require('path')
 // Runtime Environment's members available in the global scope.
 const hre = require('hardhat')
 
-const contractsSaveLocation = path.resolve(`../YouCollector/contracts/${hre.network.name}.json`)
+const configuration = require('../configuration')[hre.network.name]
+
+const contractsSaveLocation = path.resolve(__dirname, `../YouCollector/contracts/${hre.network.name}.json`)
 
 async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
-
-  // We get the contract to deploy
+  console.log(`Deploying contracts to ${hre.network.name}...`)
 
   const YouCollectorLibrary = await hre.ethers.getContractFactory('YouCollectorLibrary')
   const youCollectorLibrary = await YouCollectorLibrary.deploy()
@@ -39,13 +34,24 @@ async function main() {
   const contracts = {
     YouCollector: {
       address: youCollector.address,
-      abi: youCollector.interface.abi,
+      abi: require('../abis/YouCollector.json'),
     },
   }
 
-  fs.writeFileSync(contractsSaveLocation, JSON.stringify(contracts), 'utf-8')
+  fs.writeFileSync(contractsSaveLocation, JSON.stringify(contracts, null, 2), 'utf-8')
 
-  console.log('Contracts addresses saved to:', contractsSaveLocation)
+  console.log('Contracts data saved to:', contractsSaveLocation)
+
+  const currentVideoIdMintingPrice = await youCollector.videoIdMintingPrice()
+
+  if (currentVideoIdMintingPrice.value !== configuration.videoIdMintingPrice.value) {
+    console.log('Setting videoIdMintingPrice...')
+    const tx = await youCollector.setVideoIdMintingPrice(configuration.videoIdMintingPrice.value)
+
+    await tx.wait()
+  }
+
+  console.log('Done.')
 }
 
 // We recommend this pattern to be able to use async/await everywhere

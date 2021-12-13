@@ -1,22 +1,55 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ethers } from 'ethers'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
-import contracts from '../../contracts/polygon-dev.json'
+import contracts from '../../contracts/polygon-mumbai.json'
 
 function BlockchainServiceProvider({ children }) {
+  const [userAddress, setUserAddress] = useState(null)
+  const [transactionCount, setTransactionCount] = useState(0)
   const [blockchainService, setBlockchainService] = useState({})
 
-  const createBlockchainService = useCallback(async (userAddress = null) => {
-    console.log('Updating blockchain service', userAddress)
+  const createBlockchainService = useCallback(async () => {
+    console.log('Updating blockchain service', userAddress, transactionCount)
+
+    // Init
 
     const provider = window.ethereum ? new ethers.providers.Web3Provider(window.ethereum) : null
     const signer = provider ? provider.getSigner() : null
     const youCollector = new ethers.Contract(contracts.YouCollector.address, contracts.YouCollector.abi, provider)
 
-    async function update(...args) {
-      setBlockchainService(await createBlockchainService(...args))
+    let youCollectorSigned = null
+    let nextTransactionCount = 0
+
+    if (signer) {
+      youCollectorSigned = youCollector.connect(signer)
+
+      if (userAddress && !transactionCount) {
+        nextTransactionCount = await signer.getTransactionCount()
+
+        setTransactionCount(nextTransactionCount)
+      }
+    }
+
+    async function call(value, functionName, ...args) {
+      const signed = typeof value === 'number'
+
+      if (signed && !signer) {
+        throw new Error(`${functionName}: signer not available`)
+      }
+
+      let tx = await (signed ? youCollectorSigned : youCollector)[functionName](...args, signed ? { value } : {})
+
+      if (signed) {
+        tx = await tx.wait()
+
+        setTransactionCount(await signer.getTransactionCount())
+      }
+
+      console.log('tx', tx)
+
+      return tx
     }
 
     async function getBalance() {
@@ -24,18 +57,14 @@ function BlockchainServiceProvider({ children }) {
 
       const balance = await provider.getBalance(userAddress)
 
-      return parseFloat(ethers.utils.formatEther(balance))
+      return weiToEther(balance)
     }
 
-    let transactionCount = 0
-    let youCollectorSigned = null
-
-    if (signer) {
-      transactionCount = await signer.getTransactionCount()
-      youCollectorSigned = youCollector.connect(signer)
+    function weiToEther(wei) {
+      return parseFloat(ethers.utils.formatEther(wei))
     }
 
-    return {
+    setBlockchainService({
       // Blockchain info
       // blockchainId: '0x80001',
       blockchainId: '0x13881',
@@ -50,25 +79,26 @@ function BlockchainServiceProvider({ children }) {
       ],
       blockchainBlockExplorerUrl: 'https://mumbai.polygonscan.com',
       blockchainIconUrl: 'https://polygon.technology/media-kit/matic-token-icon.png',
+      // Metadatas
+      zeroAddress: '0x0000000000000000000000000000000000000000',
       // User info
       userAddress,
-      transactionCount,
+      transactionCount: nextTransactionCount || transactionCount,
       // blockain objects
       provider,
       signer,
       youCollector,
       youCollectorSigned,
       // Methods
+      call,
       getBalance,
-      update,
-    }
-  }, [])
+      setUserAddress,
+      // Helpers
+      weiToEther,
+    })
+  }, [userAddress, transactionCount])
 
-  const initBlockchainService = useCallback(async () => {
-    setBlockchainService(await createBlockchainService())
-  }, [createBlockchainService])
-
-  useEffect(initBlockchainService, [initBlockchainService])
+  useEffect(createBlockchainService, [createBlockchainService])
 
   return (
     <BlockchainServiceContext.Provider value={blockchainService}>

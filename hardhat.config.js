@@ -25,11 +25,11 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
  */
 module.exports = {
   solidity: '0.8.2',
-  defaultNetwork: 'polygon-dev',
+  defaultNetwork: 'polygon-mumbai',
   networks: {
     hardhat: {
     },
-    'polygon-dev': {
+    'polygon-mumbai': {
       url: 'https://rpc-mumbai.maticvigil.com',
       accounts: [process.env.PRIVATE_KEY],
     },
@@ -48,10 +48,10 @@ module.exports = {
     strict: false,
   },
   abiExporter: {
-    path: './YouCollector/contracts',
+    path: './abis',
     clear: true,
     flat: true,
-    only: ['YouCollector$'],
+    only: ['YouCollector*'],
     spacing: 2,
     pretty: true,
   },

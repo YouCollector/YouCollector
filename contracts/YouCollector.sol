@@ -60,6 +60,25 @@ library YouCollectorLibrary {
             revert();
         }
     }
+
+    function parseVideoId(string memory videoId) external pure returns (string memory) {
+        bytes memory videoIdBytes = bytes(videoId);
+        bytes memory result = new bytes(11);
+
+        result[0] = videoIdBytes[0];
+        result[1] = videoIdBytes[1];
+        result[2] = videoIdBytes[2];
+        result[3] = videoIdBytes[3];
+        result[4] = videoIdBytes[4];
+        result[5] = videoIdBytes[5];
+        result[6] = videoIdBytes[6];
+        result[7] = videoIdBytes[7];
+        result[8] = videoIdBytes[8];
+        result[9] = videoIdBytes[9];
+        result[10] = videoIdBytes[10];
+
+        return string(result);
+    }
 }
 
 /// @custom:security-contact hi@youcollector.cart
@@ -75,9 +94,7 @@ contract YouCollector is Ownable {
     MarketplaceItem[] public marketplaceItemsByDate;
     MarketplaceItem[] public marketplaceItemsByPrice;
 
-    constructor() {
-
-    }
+    constructor() {}
 
     /* ---
         GETTERS
@@ -117,12 +134,13 @@ contract YouCollector is Ownable {
         require(videoIds.length <= YouCollectorLibrary.REGISTER_MAX_VIDEOS);
 
         for (uint256 i = 0; i < videoIds.length; i++) {
-            require(videoIdToOwner[videoIds[i]] == address(0));
+            string memory parsedVideoId = YouCollectorLibrary.parseVideoId(videoIds[i]);
 
-            videoIdToOwner[videoIds[i]] = msg.sender;
+            require(videoIdToOwner[parsedVideoId] == address(0));
+
+            videoIdToOwner[parsedVideoId] = msg.sender;
+            ownerToVideoIds[msg.sender].push(parsedVideoId);
         }
-
-        ownerToVideoIds[msg.sender] = videoIds;
     }
 
     /* ---
@@ -130,11 +148,13 @@ contract YouCollector is Ownable {
     --- */
 
     function mintVideoId(string memory videoId) external payable {
-        require(videoIdToOwner[videoId] == address(0x0));
-        require(ownerToVideoIds[msg.sender].length <= YouCollectorLibrary.REGISTER_MAX_VIDEOS || msg.value >= videoIdMintingPrice);
+        string memory parsedVideoId = YouCollectorLibrary.parseVideoId(videoId);
 
-        videoIdToOwner[videoId] = msg.sender;
-        ownerToVideoIds[msg.sender].push(videoId);
+        require(videoIdToOwner[parsedVideoId] == address(0x0));
+        require(ownerToVideoIds[msg.sender].length < YouCollectorLibrary.REGISTER_MAX_VIDEOS || msg.value >= videoIdMintingPrice);
+
+        videoIdToOwner[parsedVideoId] = msg.sender;
+        ownerToVideoIds[msg.sender].push(parsedVideoId);
         payable(owner()).transfer(msg.value);
     }
 

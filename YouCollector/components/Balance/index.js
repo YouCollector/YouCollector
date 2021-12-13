@@ -19,7 +19,7 @@ function Balance() {
       <Image
         source={require('../../assets/matic-token-icon.webp')}
         fadeDuration={0}
-        style={{ width: 24, height: 24 }}
+        style={{ width: 16, height: 16 }}
       />
       <Text marginLeft="1">{balance.toFixed(4)}</Text>
     </HStack>

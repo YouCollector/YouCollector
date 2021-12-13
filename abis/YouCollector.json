@@ -1,0 +1,22 @@
+[
+  "event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)",
+  "function bidOnVideoId(string videoId) payable",
+  "function claimVideoId(string videoId)",
+  "function getMarketplaceItems(uint256 skip, uint256 sort) view returns (tuple[] marketplaceItems)",
+  "function getUserInfo(address userAddress) view returns (string[] videoIds)",
+  "function marketplaceItemsByDate(uint256) view returns (string videoId, address owner, address bidder, uint256 price, uint256 bid, uint256 bidCount, uint256 endDate)",
+  "function marketplaceItemsByPrice(uint256) view returns (string videoId, address owner, address bidder, uint256 price, uint256 bid, uint256 bidCount, uint256 endDate)",
+  "function mintMarketplaceItem(string videoId, uint256 price, uint256 bid, uint256 bidEndDate)",
+  "function mintVideoId(string videoId) payable",
+  "function owner() view returns (address)",
+  "function ownerToVideoIds(address, uint256) view returns (string)",
+  "function registerNewUser(string[] videoIds)",
+  "function renounceOwnership()",
+  "function setVideoIdMintingPrice(uint256 newPrice)",
+  "function setVideoIdTransferPlatformFee(uint256 newVideoIdTransferPlatformFee)",
+  "function transferOwnership(address newOwner)",
+  "function videoIdMintingPrice() view returns (uint256)",
+  "function videoIdToMarketplaceItem(string) view returns (string videoId, address owner, address bidder, uint256 price, uint256 bid, uint256 bidCount, uint256 endDate)",
+  "function videoIdToOwner(string) view returns (address)",
+  "function videoIdTransferPlatformFee() view returns (uint256)"
+]
