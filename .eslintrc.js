@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    browser: false,
+    browser: true,
     es2021: true,
     mocha: true,
     node: true,
@@ -17,5 +17,7 @@ module.exports = {
   ],
   rules: {
     'import/no-extraneous-dependencies': 'off',
+    'react/style-prop-object': 'off',
+    'react/jsx-no-bind': 'off',
   },
 }

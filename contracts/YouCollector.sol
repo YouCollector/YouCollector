@@ -15,6 +15,7 @@ struct MarketplaceItem {
 
 library YouCollectorLibrary {
 
+    uint256 public constant REGISTER_MAX_VIDEOS = 8;
     uint256 public constant MARKETPLACE_ITEMS_PAGINATION = 4 * 12;
     uint256 public constant MARKETPLACE_ITEMS_MIN_BID_TIME = 24 * 60 * 60;
 
@@ -113,6 +114,7 @@ contract YouCollector is Ownable {
 
     function registerNewUser(string[] memory videoIds) external {
         require(ownerToVideoIds[msg.sender].length == 0);
+        require(videoIds.length <= YouCollectorLibrary.REGISTER_MAX_VIDEOS);
 
         for (uint256 i = 0; i < videoIds.length; i++) {
             require(videoIdToOwner[videoIds[i]] == address(0));

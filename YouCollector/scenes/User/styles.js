@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  walletContainer: {
+  spacer: {
     marginVertical: 32,
   },
 })

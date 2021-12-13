@@ -3,6 +3,8 @@ import { ethers } from 'ethers'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
+import contracts from '../../contracts/polygon-dev.json'
+
 function BlockchainServiceProvider({ children }) {
   const [blockchainService, setBlockchainService] = useState({})
 
@@ -11,7 +13,7 @@ function BlockchainServiceProvider({ children }) {
 
     const provider = window.ethereum ? new ethers.providers.Web3Provider(window.ethereum) : null
     const signer = provider ? provider.getSigner() : null
-    const contract = null
+    const youCollector = new ethers.Contract(contracts.YouCollector.address, contracts.YouCollector.abi, provider)
 
     async function update(...args) {
       setBlockchainService(await createBlockchainService(...args))
@@ -26,9 +28,11 @@ function BlockchainServiceProvider({ children }) {
     }
 
     let transactionCount = 0
+    let youCollectorSigned = null
 
     if (signer) {
       transactionCount = await signer.getTransactionCount()
+      youCollectorSigned = youCollector.connect(signer)
     }
 
     return {
@@ -52,7 +56,8 @@ function BlockchainServiceProvider({ children }) {
       // blockain objects
       provider,
       signer,
-      contract,
+      youCollector,
+      youCollectorSigned,
       // Methods
       getBalance,
       update,

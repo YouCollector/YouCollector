@@ -7,9 +7,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  walletContainer: {
-    marginVertical: 32,
-  },
 })
 
 export default styles
