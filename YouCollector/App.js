@@ -11,6 +11,7 @@ import * as Linking from 'expo-linking'
 import shortenAddress from './utils/shortenAddress'
 
 import BlockchainServiceProvider from './components/BlockchainServiceProvider'
+import ApplicationLayout from './components/ApplicationLayout'
 import Header from './components/Header'
 
 import Landing from './scenes/Landing'
@@ -31,6 +32,12 @@ const linking = {
 }
 
 const Stack = createNativeStackNavigator()
+
+const useApplicationLayout = Component => props => (
+  <ApplicationLayout {...props}>
+    <Component {...props} />
+  </ApplicationLayout>
+)
 
 export default function App() {
   return (
@@ -53,22 +60,22 @@ export default function App() {
           >
             <Stack.Screen
               name="Landing"
-              component={Landing}
+              component={useApplicationLayout(Landing)}
               options={{ title: 'YouCollector' }}
             />
             <Stack.Screen
               name="Register"
-              component={Register}
+              component={useApplicationLayout(Register)}
               options={{ title: 'Sign-up' }}
             />
             <Stack.Screen
               name="User"
-              component={User}
+              component={useApplicationLayout(User)}
               options={({ route }) => ({ title: shortenAddress(route.params.address) })}
             />
             <Stack.Screen
               name="Mint"
-              component={Mint}
+              component={useApplicationLayout(Mint)}
               options={{ title: 'Mint video' }}
             />
           </Stack.Navigator>

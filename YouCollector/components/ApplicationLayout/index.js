@@ -1,19 +1,15 @@
 import React from 'react'
-import { Text, View } from 'react-native'
-
-import WalletConnector from '../WalletConnector'
-
-import styles from './styles'
+import { VStack } from 'native-base'
 
 function ApplicationLayout({ children }) {
   return (
-    <>
-      <Text>ApplicationLayout</Text>
-      <WalletConnector />
-      <View style={styles.container}>
-        {children}
-      </View>
-    </>
+    <VStack
+      backgroundColor="white"
+      flex={1}
+      p="4"
+    >
+      {children}
+    </VStack>
   )
 }
 

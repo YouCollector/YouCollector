@@ -8,7 +8,10 @@ function Balance() {
   const [balance, setBalance] = useState(null)
 
   const updateBalance = useCallback(async () => {
-    setBalance(await blockchainService.getBalance())
+    const balanceString = await blockchainService.getBalance()
+    const [int, dec] = balanceString.split('.')
+
+    setBalance(`${int}.${dec.substring(0, 4)}`)
   }, [blockchainService])
 
   useEffect(updateBalance, [updateBalance])
@@ -23,7 +26,7 @@ function Balance() {
 
   return (
     <HStack alignItems="center">
-      <Text marginRight="1">{balance.toFixed(4)}</Text>
+      <Text marginRight="1">{balance}</Text>
       <Image
         source={require('../../assets/matic-token-icon.webp')}
         fadeDuration={0}

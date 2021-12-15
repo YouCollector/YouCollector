@@ -1,8 +1,10 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { Box, Button, Text, VStack } from 'native-base'
+import { Box, Button, Heading, Text, VStack } from 'native-base'
 import { MaterialIcons } from '@expo/vector-icons'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
+import shortenAddress from '../../utils/shortenAddress'
+import YoutubePlayer from '../../components/YoutubePlayer'
 
 function User({ navigation, route }) {
   const [videoIds, setVideoIds] = useState([])
@@ -13,9 +15,10 @@ function User({ navigation, route }) {
   const getUserVideosIds = useCallback(async () => {
     if (!blockchainService.initialized) return
 
-    const videoIds = await blockchainService.call(false, 'getUserInfo', route.params.address)
+    const nextVideoIds = await blockchainService.call(false, 'getUserInfo', route.params.address)
+    console.log('boom', nextVideoIds)
 
-    setVideoIds(videoIds)
+    setVideoIds(nextVideoIds)
   }, [blockchainService, route.params.address])
 
   useEffect(() => {
@@ -23,13 +26,24 @@ function User({ navigation, route }) {
   }, [getUserVideosIds])
 
   return (
-    <Box
-      backgroundColor="white"
-      flex={1}
-      p="4"
-    >
+    <>
+      <Heading
+        textAlign="center"
+        size="3xl"
+      >
+        Collection
+      </Heading>
+      <Text
+        marginTop={0}
+        textAlign="center"
+      >
+        {route.params.address}
+      </Text>
       {isViewer && (
-        <Box alignItems="end">
+        <Box
+          alignItems="center"
+          marginTop={4}
+        >
           <Button
             leftIcon={(
               <MaterialIcons
@@ -44,9 +58,17 @@ function User({ navigation, route }) {
           </Button>
         </Box>
       )}
-      <Text>{route.params.address}</Text>
-      <VStack>{videoIds}</VStack>
-    </Box>
+      <VStack marginTop={4}>
+        {videoIds.map(videoId => (
+          <Box
+            key={videoId}
+            marginBottom={4}
+          >
+            <YoutubePlayer videoId={videoId} />
+          </Box>
+        ))}
+      </VStack>
+    </>
   )
 }
 

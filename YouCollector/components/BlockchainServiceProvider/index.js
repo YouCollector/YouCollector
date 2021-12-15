@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
@@ -39,8 +39,11 @@ function BlockchainServiceProvider({ children }) {
         throw new Error(`${functionName}: signer not available`)
       }
 
-      let tx = await (signed ? youCollectorSigned : youCollector)[functionName](...args, signed ? { value } : {})
+      console.log('calling', functionName, ...args, value)
 
+      let tx = await (signed ? youCollectorSigned : youCollector)[functionName](...args, signed ? { value: ethers.utils.parseEther(value.toString()) } : {})
+
+      console.log('Waiting')
       if (signed) {
         tx = await tx.wait()
 
@@ -57,11 +60,11 @@ function BlockchainServiceProvider({ children }) {
 
       const balance = await provider.getBalance(userAddress)
 
-      return weiToEther(balance)
+      return parseBigNumber(balance)
     }
 
-    function weiToEther(wei) {
-      return parseFloat(ethers.utils.formatEther(wei))
+    function parseBigNumber(bigNumber) {
+      return ethers.utils.formatEther(bigNumber)
     }
 
     setBlockchainService({
@@ -95,7 +98,7 @@ function BlockchainServiceProvider({ children }) {
       getBalance,
       setUserAddress,
       // Helpers
-      weiToEther,
+      parseBigNumber,
     })
   }, [userAddress, transactionCount])
 
