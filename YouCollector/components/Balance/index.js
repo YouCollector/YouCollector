@@ -1,27 +1,35 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { Image } from 'react-native'
-import { HStack, Text } from 'native-base'
+import { Box, HStack, Image, Text } from 'native-base'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
 function Balance() {
   const blockchainService = useContext(BlockchainServiceContext)
-  const [balance, setBalance] = useState(0)
+  const [balance, setBalance] = useState(null)
 
   const updateBalance = useCallback(async () => {
     setBalance(await blockchainService.getBalance())
   }, [blockchainService])
 
-  useEffect(updateBalance, [updateBalance, blockchainService.userAddress, blockchainService.transactionCount])
+  useEffect(updateBalance, [updateBalance])
+
+  if (balance === null) {
+    return (
+      <Box
+        height="21px"
+      />
+    )
+  }
 
   return (
     <HStack alignItems="center">
+      <Text marginRight="1">{balance.toFixed(4)}</Text>
       <Image
         source={require('../../assets/matic-token-icon.webp')}
         fadeDuration={0}
-        style={{ width: 16, height: 16 }}
+        style={{ width: 18, height: 18 }}
+        marginTop="2px"
       />
-      <Text marginLeft="1">{balance.toFixed(4)}</Text>
     </HStack>
   )
 }

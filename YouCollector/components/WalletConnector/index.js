@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { Button, Pressable, Text, VStack } from 'native-base'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { Button, Pressable, Text, VStack, WarningIcon } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
@@ -8,14 +8,35 @@ import shortenAddress from '../../utils/shortenAddress'
 
 function WalletConnector() {
   const blockchainService = useContext(BlockchainServiceContext)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [hasMetamask, setHasMetamask] = useState(true)
+  const [isDisplayed, setIsDisplayed] = useState(false)
   const navigation = useNavigation()
 
-  async function handleMetamaskPress() {
-    const hasMetamask = window.ethereum?.isMetaMask
+  const connectWalletIfPossible = useCallback(async () => {
+    if (!(blockchainService.initialized && window.ethereum?.isMetaMask)) return
 
-    if (!hasMetamask) {
+    setLoading(true)
+
+    const [userAddress] = await window.ethereum.request({ method: 'eth_requestAccounts' })
+
+    if (userAddress) {
+      blockchainService.setUserAddress(userAddress)
+    }
+
+    setLoading(false)
+  }, [blockchainService])
+
+  useEffect(connectWalletIfPossible, [connectWalletIfPossible])
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsDisplayed(true)
+    }, 333)
+  }, [])
+
+  async function handleMetamaskPress() {
+    if (!window.ethereum?.isMetaMask) {
       setHasMetamask(false)
 
       return
@@ -70,9 +91,15 @@ function WalletConnector() {
     )
   }
 
+  if (!isDisplayed) {
+    return null
+  }
+
   return (
     <Button
       onPress={handleMetamaskPress}
+      isLoading={loading}
+      isLoadingText="Trying to connect..."
     >
       Connect to MetaMask
     </Button>

@@ -1,14 +1,13 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Box, Button, Input, Text, VStack } from 'native-base'
-import { MaterialIcons } from '@expo/vector-icons'
 import getVideoId from 'get-video-id'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
-function Mint({ navigation, route }) {
+function Mint() {
   const [videoUrl, setVideoUrl] = useState('')
-  const [videoIdMinitingPrice, setVideoIdMinitingPrice] = useState(0)
   const [videoIds, setVideoIds] = useState([])
+  const [videoIdMinitingPrice, setVideoIdMinitingPrice] = useState(0)
   const blockchainService = useContext(BlockchainServiceContext)
 
   const isFree = videoIds.length < 8
@@ -16,13 +15,16 @@ function Mint({ navigation, route }) {
   const priceString = isFree ? 'free' : `${blockchainService.weiToEther(videoIdMinitingPrice)} MATIC`
 
   const getVideoIdMintingPrice = useCallback(async () => {
-    setVideoIdMinitingPrice(await blockchainService.youCollector.videoIdMintingPrice())
+    if (!blockchainService.initialized) return
+
+    setVideoIdMinitingPrice(await blockchainService.call(false, 'videoIdMintingPrice'))
   }, [blockchainService])
 
   const getUserVideosIds = useCallback(async () => {
-    if (blockchainService.userAddress) {
-      setVideoIds(await blockchainService.youCollector.getUserInfo(blockchainService.userAddress))
-    }
+    if (!blockchainService.initialized) return
+    if (!blockchainService.userAddress) return
+
+    setVideoIds(await blockchainService.call(false, 'getUserInfo', blockchainService.userAddress))
   }, [blockchainService])
 
   useEffect(() => {
@@ -67,11 +69,12 @@ function Mint({ navigation, route }) {
   }
 
   return (
-    <Box
+    <VStack
       backgroundColor="white"
       flex={1}
       p="4"
     >
+
       <Input
         placeholder="YouTube video URL or Id"
         onChange={event => setVideoUrl(event.target.value)}
@@ -79,7 +82,10 @@ function Mint({ navigation, route }) {
       <Button onPress={handleSubmit}>
         {`Mint video (${priceString} + gas fees)`}
       </Button>
-    </Box>
+      <Text>
+        By minting a video you agree to the privacy policy and terms of service.
+      </Text>
+    </VStack>
   )
 }
 

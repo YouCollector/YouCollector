@@ -11,7 +11,9 @@ function User({ navigation, route }) {
   const isViewer = route.params.address === blockchainService.userAddress
 
   const getUserVideosIds = useCallback(async () => {
-    const videoIds = await blockchainService.youCollector.getUserInfo(route.params.address)
+    if (!blockchainService.initialized) return
+
+    const videoIds = await blockchainService.call(false, 'getUserInfo', route.params.address)
 
     setVideoIds(videoIds)
   }, [blockchainService, route.params.address])

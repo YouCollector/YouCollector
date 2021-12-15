@@ -1,11 +1,12 @@
+import 'react-native-get-random-values'
+import '@ethersproject/shims'
+
 import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { NativeBaseProvider } from 'native-base'
-
-import 'react-native-get-random-values'
-import '@ethersproject/shims'
+import { NativeBaseProvider, Text } from 'native-base'
+import * as Linking from 'expo-linking'
 
 import shortenAddress from './utils/shortenAddress'
 
@@ -17,6 +18,18 @@ import Register from './scenes/Register'
 import User from './scenes/User'
 import Mint from './scenes/Mint'
 
+const linking = {
+  prefixes: [Linking.createURL('/'), 'https://youcollector.art'],
+  config: {
+    screens: {
+      Landing: '',
+      Register: 'register',
+      User: '~/:address',
+      Mint: 'mint',
+    },
+  },
+}
+
 const Stack = createNativeStackNavigator()
 
 export default function App() {
@@ -24,7 +37,14 @@ export default function App() {
     <BlockchainServiceProvider>
       <NativeBaseProvider>
         <StatusBar style="auto" />
-        <NavigationContainer>
+        <NavigationContainer
+          linking={linking}
+          fallback={() => (
+            <Text>
+              Loading...
+            </Text>
+          )}
+        >
           <Stack.Navigator
             initialRouteName="Landing"
             screenOptions={{

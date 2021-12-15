@@ -8,7 +8,7 @@ import contracts from '../../contracts/polygon-mumbai.json'
 function BlockchainServiceProvider({ children }) {
   const [userAddress, setUserAddress] = useState(null)
   const [transactionCount, setTransactionCount] = useState(0)
-  const [blockchainService, setBlockchainService] = useState({})
+  const [blockchainService, setBlockchainService] = useState({ initialized: false })
 
   const createBlockchainService = useCallback(async () => {
     console.log('Updating blockchain service', userAddress, transactionCount)
@@ -65,6 +65,7 @@ function BlockchainServiceProvider({ children }) {
     }
 
     setBlockchainService({
+      initialized: true,
       // Blockchain info
       // blockchainId: '0x80001',
       blockchainId: '0x13881',
