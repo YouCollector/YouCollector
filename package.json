@@ -5,13 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "npx hardhat test",
-    "start:watch": "nodemon --watch contracts --watch .hardhat.config.js --watch package.json -e sol --exec \"npm run dev\"",
+    "start:watch": "npm run dev:watch",
     "dev": "npm run hardhat:compile",
+    "dev:watch": "nodemon --watch contracts --watch .hardhat.config.js --watch package.json -e sol --exec \"npm run dev\"",
+    "warn": "echo \"Deploying contracts to the blockchain. Continue?\" && npx -q press-any-key",
+    "deploy": "npm run warn && npm run hardhat:deploy && npm run hardhat:setVideoIdMintingPrice",
     "hardhat:clean": "rm -rf artifacts cache",
     "hardhat:compile": "npx hardhat compile",
     "hardhat:size": "npx hardhat size-contracts",
     "hardhat:accounts": "npx hardhat accounts",
-    "hardhat:deploy": "npx hardhat run ./scripts/deploy.js"
+    "hardhat:deploy": "npx hardhat run ./scripts/deploy.js",
+    "hardhat:setVideoIdMintingPrice": "npx hardhat run ./scripts/setVideoIdMintingPrice.js",
+    "hardhat:getFromFaucet": "npx hardhat run ./scripts/getFromFaucet.js"
   },
   "repository": {
     "type": "git",

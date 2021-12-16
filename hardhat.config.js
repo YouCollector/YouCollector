@@ -30,16 +30,13 @@ module.exports = {
     hardhat: {
     },
     'polygon-mumbai': {
-      url: 'https://rpc-mumbai.maticvigil.com',
+      url: process.env.ALCHEMY_API_URL,
       accounts: [process.env.PRIVATE_KEY],
     },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
     currency: 'USD',
-  },
-  etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
   },
   contractSizer: {
     alphaSort: true,

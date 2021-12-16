@@ -41,7 +41,7 @@ function Register({ navigation }) {
     await blockchainService.youCollectorSigned.registerNewUser(videoIds)
     console.log('Done')
 
-    navigation.navigate('User', { address: blockchainService.address })
+    navigation.navigate('User', { address: blockchainService.userAddress })
   }
 
   return (

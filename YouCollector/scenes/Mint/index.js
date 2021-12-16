@@ -6,7 +6,7 @@ import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 import shortenAddress from '../../utils/shortenAddress'
 import YoutubePlayer from '../../components/YoutubePlayer'
 
-function Mint() {
+function Mint({ navigation }) {
   const [videoUrl, setVideoUrl] = useState('')
   const [videoIds, setVideoIds] = useState([])
   const [videoIdMinitingPrice, setVideoIdMinitingPrice] = useState(0)
@@ -71,29 +71,20 @@ function Mint() {
   }
 
   async function handleSubmit() {
-    const { service, id: videoId } = getVideoId(videoUrl)
-
-    if (service !== 'youtube') {
-      console.log('videoUrl is not a youtube video')
-
-      return
-    }
-
-    const existingOwner = await blockchainService.call(false, 'videoIdToOwner', videoId)
-
-    if (existingOwner !== blockchainService.zeroAddress) {
-      console.log('Already minted', existingOwner)
-
-      return
-    }
+    setIsLoading(true)
 
     try {
-      await blockchainService.call(price, 'mintVideoId', videoId)
+      await blockchainService.call(price, 'mintVideoId', getVideoId(videoUrl).id)
 
       console.log('success')
+
+      setIsLoading(false)
+
+      navigation.navigate('User', { address: blockchainService.userAddress })
     }
     catch (error) {
       console.log('error', error.message)
+      setError(error.message)
     }
   }
 

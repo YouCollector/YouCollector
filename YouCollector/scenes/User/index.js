@@ -59,7 +59,7 @@ function User({ navigation, route }) {
         </Box>
       )}
       <VStack marginTop={4}>
-        {videoIds.map(videoId => (
+        {[...videoIds].reverse().map(videoId => (
           <Box
             key={videoId}
             marginBottom={4}
