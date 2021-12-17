@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Box, Text } from 'native-base'
+import { Box, Spinner } from 'native-base'
 
 function YoutubePlayer({ videoId, width = '100%' }) {
   const iframeRef = useRef()
@@ -17,7 +17,10 @@ function YoutubePlayer({ videoId, width = '100%' }) {
   }
 
   return (
-    <Box position="relative">
+    <Box
+      position="relative"
+      width={width}
+    >
       {!isReady && (
         <Box
           position="absolute"
@@ -28,7 +31,7 @@ function YoutubePlayer({ videoId, width = '100%' }) {
           alignItems="center"
           justifyContent="center"
         >
-          <Text>Loading...</Text>
+          <Spinner size="lg" />
         </Box>
       )}
       <iframe

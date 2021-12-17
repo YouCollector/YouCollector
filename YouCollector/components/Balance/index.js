@@ -11,7 +11,7 @@ function Balance() {
     const balanceString = await blockchainService.getBalance()
     const [int, dec] = balanceString.split('.')
 
-    setBalance(`${int}.${dec.substring(0, 4)}`)
+    setBalance(`${int}.${dec.substring(0, Math.max(4, 7 - int.length))}`)
   }, [blockchainService])
 
   useEffect(updateBalance, [updateBalance])

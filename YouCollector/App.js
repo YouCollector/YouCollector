@@ -5,13 +5,14 @@ import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { NativeBaseProvider, Text, extendTheme } from 'native-base'
+import { Box, NativeBaseProvider, Text, extendTheme } from 'native-base'
 import * as Linking from 'expo-linking'
 
 import shortenAddress from './utils/shortenAddress'
 
 import BlockchainServiceProvider from './components/BlockchainServiceProvider'
 import ApplicationLayout from './components/ApplicationLayout'
+import AuthenticationBouncer from './components/AuthenticationBouncer'
 import Header from './components/Header'
 
 import Landing from './scenes/Landing'
@@ -91,7 +92,7 @@ const theme = extendTheme({
   components: {
     Button: {
       baseStyle: {
-        rounded: false,
+        // rounded: false,
       },
     },
   },
@@ -117,28 +118,30 @@ const useApplicationLayout = Component => props => (
   </ApplicationLayout>
 )
 
+const useAuthenticationBouncer = Component => props => (
+  <AuthenticationBouncer>
+    <Component {...props} />
+  </AuthenticationBouncer>
+)
+
 export default function App() {
   return (
     <BlockchainServiceProvider>
       <NativeBaseProvider theme={theme}>
         <StatusBar style="auto" />
-        <NavigationContainer
-          linking={linking}
-          fallback={() => (
-            <Text>
-              Loading...
-            </Text>
-          )}
-        >
+        <NavigationContainer linking={linking}>
           <Stack.Navigator
             initialRouteName="Landing"
             screenOptions={{
               header: Header,
+              contentStyle: {
+                backgroundColor: '#f9f9f9',
+              },
             }}
           >
             <Stack.Screen
               name="Landing"
-              component={useApplicationLayout(Landing)}
+              component={Landing}
               options={{ title: 'YouCollector' }}
             />
             <Stack.Screen
@@ -153,7 +156,7 @@ export default function App() {
             />
             <Stack.Screen
               name="Mint"
-              component={useApplicationLayout(Mint)}
+              component={useAuthenticationBouncer(useApplicationLayout(Mint))}
               options={{ title: 'Mint video' }}
             />
           </Stack.Navigator>

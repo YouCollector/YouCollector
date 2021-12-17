@@ -1,28 +1,38 @@
 import React, { useContext } from 'react'
-import { Text, View } from 'react-native'
-import { Button } from 'native-base'
+import { Box, Button, Heading, Text, VStack } from 'native-base'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
-
-import styles from './styles'
 
 function Landing({ navigation }) {
   const blockchainService = useContext(BlockchainServiceContext)
 
   return (
-    <View style={styles.container}>
-      <Text>Landing global</Text>
-      <Button
-        onPress={() => navigation.navigate('Register')}
+    <>
+      <Heading
+        fontSize="9xl"
+        textAlign="center"
+        marginTop={16}
       >
-        Sign up
-      </Button>
-      <Button
-        onPress={() => navigation.navigate('User', { address: blockchainService.userAddress })}
+        Collect and Trade<br />YouTube Videos
+      </Heading>
+      <Box
+        alignItems="center"
+        marginTop={16}
       >
-        My Collection
-      </Button>
-    </View>
+        <Button
+          size="lg"
+          onPress={() => navigation.navigate('Register')}
+        >
+          <Text
+            fontSize="3xl"
+            color="white"
+          >
+            Start collecting
+
+          </Text>
+        </Button>
+      </Box>
+    </>
   )
 }
 

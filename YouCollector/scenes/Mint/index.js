@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { Alert, Box, Button, Input, Text } from 'native-base'
+import { Alert, Box, Button, Input, Link, Spinner, Text } from 'native-base'
 import getVideoId from 'get-video-id'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
@@ -57,12 +57,21 @@ function Mint({ navigation }) {
 
     setIsLoading(true)
 
-    const existingOwner = await blockchainService.call(false, 'videoIdToOwner', videoId)
+    const existingOwnerAddress = await blockchainService.call(false, 'videoIdToOwner', videoId)
 
     setIsLoading(false)
 
-    if (existingOwner !== blockchainService.zeroAddress) {
-      setError(`This video has already been minted by ${shortenAddress(existingOwner)}`)
+    if (existingOwnerAddress !== blockchainService.zeroAddress) {
+      setError(
+        <>
+          <Text>
+            This video has already been minted by
+          </Text>
+          <Link onPress={() => navigation.navigate('User', { address: existingOwnerAddress })}>
+            {shortenAddress(existingOwnerAddress)}
+          </Link>
+        </>
+      )
 
       return
     }
@@ -96,6 +105,12 @@ function Mint({ navigation }) {
     )
   }
 
+  if (!videoIds.length) {
+    return (
+      <Spinner />
+    )
+  }
+
   return (
     <>
       {isFree && (
@@ -104,7 +119,7 @@ function Mint({ navigation }) {
         </Text>
       )}
       <Text marginTop={1}>
-        Enter a YouTube video URL below to add it to your collection. A video cannot belong to more than one collection.
+        Enter a YouTube video URL below to add it to your collection. Once claimed, it cannot be claimed again.
       </Text>
       <Input
         placeholder="YouTube video URL"

@@ -4,7 +4,6 @@ import { VStack } from 'native-base'
 function ApplicationLayout({ children }) {
   return (
     <VStack
-      backgroundColor="white"
       flex={1}
       p="4"
     >

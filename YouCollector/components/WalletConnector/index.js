@@ -8,7 +8,7 @@ import shortenAddress from '../../utils/shortenAddress'
 
 function WalletConnector() {
   const blockchainService = useContext(BlockchainServiceContext)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [hasMetamask, setHasMetamask] = useState(true)
   const [isDisplayed, setIsDisplayed] = useState(false)
   const navigation = useNavigation()
@@ -27,7 +27,7 @@ function WalletConnector() {
     setLoading(false)
   }, [blockchainService])
 
-  useEffect(connectWalletIfPossible, [connectWalletIfPossible])
+  // useEffect(connectWalletIfPossible, [connectWalletIfPossible])
 
   useEffect(() => {
     setTimeout(() => {

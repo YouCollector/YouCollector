@@ -1,13 +1,22 @@
-import React from 'react'
-import { Text } from 'react-native'
-import { Box, HStack, Heading } from 'native-base'
+import React, { useContext } from 'react'
+import { Box, HStack, Heading, useBreakpointValue } from 'native-base'
 import { getHeaderTitle } from '@react-navigation/elements'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 import WalletConnector from '../WalletConnector'
+import MintButton from '../MintButton'
+
+import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
 function Header({ navigation, route, options, back }) {
-  const title = getHeaderTitle(options, route.name)
+  const blockchainService = useContext(BlockchainServiceContext)
+  // const isLargeScreen = useBreakpointValue({
+  //   base: false,
+  //   md: true,
+  // })
+  const isLargeScreen = true
+
+  console.log('isLargeScreen', isLargeScreen)
 
   return (
     <HStack
@@ -29,10 +38,15 @@ function Header({ navigation, route, options, back }) {
         </Box>
       )}
       <Heading>
-        {title}
+        {isLargeScreen ? 'YouCollector' : getHeaderTitle(options, route.name)}
       </Heading>
       <Box flexGrow={1} />
       <WalletConnector />
+      {isLargeScreen && (
+        <Box ml={blockchainService.userAddress ? 4 : 0}>
+          <MintButton />
+        </Box>
+      )}
     </HStack>
   )
 }
