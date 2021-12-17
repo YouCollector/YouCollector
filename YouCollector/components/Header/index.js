@@ -9,7 +9,7 @@ import MintButton from '../MintButton'
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
 function Header({ navigation, route, options, back }) {
-  const blockchainService = useContext(BlockchainServiceContext)
+  // const blockchainService = useContext(BlockchainServiceContext)
   // const isLargeScreen = useBreakpointValue({
   //   base: false,
   //   md: true,
@@ -43,7 +43,7 @@ function Header({ navigation, route, options, back }) {
       <Box flexGrow={1} />
       <WalletConnector />
       {isLargeScreen && (
-        <Box ml={blockchainService.userAddress ? 4 : 0}>
+        <Box ml={true ? 4 : 0}>
           <MintButton />
         </Box>
       )}

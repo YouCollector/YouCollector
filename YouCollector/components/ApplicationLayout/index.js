@@ -1,14 +1,19 @@
 import React from 'react'
 import { VStack } from 'native-base'
 
+import Header from '../Header'
+
 function ApplicationLayout({ children }) {
   return (
-    <VStack
-      flex={1}
-      p="4"
-    >
-      {children}
-    </VStack>
+    <>
+      <Header />
+      <VStack
+        flex={1}
+        p="4"
+      >
+        {children}
+      </VStack>
+    </>
   )
 }
 

@@ -133,7 +133,7 @@ export default function App() {
           <Stack.Navigator
             initialRouteName="Landing"
             screenOptions={{
-              header: Header,
+              header: () => null,
               contentStyle: {
                 backgroundColor: '#f9f9f9',
               },
@@ -141,7 +141,7 @@ export default function App() {
           >
             <Stack.Screen
               name="Landing"
-              component={Landing}
+              component={useApplicationLayout(Landing)}
               options={{ title: 'YouCollector' }}
             />
             <Stack.Screen

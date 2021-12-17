@@ -13,7 +13,13 @@ function Landing({ navigation }) {
         textAlign="center"
         marginTop={16}
       >
-        Collect and Trade<br />YouTube Videos
+        Collect and Trade
+      </Heading>
+      <Heading
+        fontSize="9xl"
+        textAlign="center"
+      >
+        YouTube Videos
       </Heading>
       <Box
         alignItems="center"
