@@ -15,8 +15,8 @@ struct MarketplaceItem {
 
 library YouCollectorLibrary {
 
-    uint256 public constant REGISTER_MAX_VIDEOS = 8;
-    uint256 public constant MARKETPLACE_ITEMS_PAGINATION = 4 * 12;
+    uint256 public constant REGISTER_MAX_VIDEOS = 6;
+    uint256 public constant MARKETPLACE_ITEMS_PAGINATION = 3 * 12;
     uint256 public constant MARKETPLACE_ITEMS_MIN_BID_TIME = 24 * 60 * 60;
 
     uint256 public constant SORT_CREATED_ASC = 0;
@@ -24,37 +24,22 @@ library YouCollectorLibrary {
     uint256 public constant SORT_PRICE_ASC = 2;
     uint256 public constant SORT_PRICE_DESC = 3;
 
-    function getPaginatedMarketplaceItem(MarketplaceItem[] calldata marketplaceItems, uint256 skip, uint256 sort) external view returns (MarketplaceItem[] memory paginatedMarketplaceItems) {
-        paginatedMarketplaceItems = new MarketplaceItem[](MARKETPLACE_ITEMS_PAGINATION);
-
-        uint256 passCount = 0;
+    function getPaginatedMarketplaceItems(MarketplaceItem[] calldata marketplaceItems, uint256 skip, uint256 sort) external pure returns (MarketplaceItem[] memory paginatedMarketplaceItems) {
+        paginatedMarketplaceItems = new MarketplaceItem[](min(MARKETPLACE_ITEMS_PAGINATION, marketplaceItems.length - skip));
 
         if (sort == SORT_CREATED_DESC) {
-            // TODO optimize with variable
-            for (uint256 i = marketplaceItems.length - skip - 1; i >= marketplaceItems.length - skip - MARKETPLACE_ITEMS_PAGINATION - passCount - 1; i--) {
-                if (marketplaceItems[i].endDate > block.timestamp) {
-                    passCount++;
-
-                    continue;
-                }
-
-                paginatedMarketplaceItems[MARKETPLACE_ITEMS_PAGINATION - i + passCount] = marketplaceItems[i];
+            for (uint256 i = 0; i < min(MARKETPLACE_ITEMS_PAGINATION, marketplaceItems.length - skip); i++) {
+                paginatedMarketplaceItems[i] = marketplaceItems[marketplaceItems.length - 1 - i - skip];
             }
 
-            return marketplaceItems;
+            return paginatedMarketplaceItems;
         }
-        else if (sort == SORT_CREATED_DESC) {
-            for (uint256 i = skip; i < MARKETPLACE_ITEMS_PAGINATION + passCount; i++) {
-                if (marketplaceItems[i].endDate > block.timestamp) {
-                    passCount++;
-
-                    continue;
-                }
-
-                paginatedMarketplaceItems[i - passCount] = marketplaceItems[i];
+        else if (sort == SORT_CREATED_ASC) {
+            for (uint256 i = 0; i < min(MARKETPLACE_ITEMS_PAGINATION, marketplaceItems.length - skip); i++) {
+                paginatedMarketplaceItems[i] = marketplaceItems[i + skip];
             }
 
-            return marketplaceItems;
+            return paginatedMarketplaceItems;
         }
         else {
             revert();
@@ -78,6 +63,14 @@ library YouCollectorLibrary {
         result[10] = videoIdBytes[10];
 
         return string(result);
+    }
+
+    function min(uint256 a, uint256 b) internal pure returns (uint256) {
+        if (a < b) {
+            return a;
+        }
+
+        return b;
     }
 }
 
@@ -110,7 +103,7 @@ contract YouCollector is Ownable {
     }
 
     function getMarketplaceItems(uint256 skip, uint256 sort) external view returns (MarketplaceItem[] memory marketplaceItems) {
-        return YouCollectorLibrary.getPaginatedMarketplaceItem(marketplaceItemsByDate, skip, sort);
+        return YouCollectorLibrary.getPaginatedMarketplaceItems(marketplaceItemsByDate, skip, sort);
     }
 
     /* ---

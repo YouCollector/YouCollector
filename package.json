@@ -4,8 +4,9 @@
   "description": "YouCollector multi devices decentralised app",
   "main": "index.js",
   "scripts": {
-    "test": "npx hardhat test",
-    "start:watch": "npm run dev:watch",
+    "test": "npx hardhat test --network hardhat",
+    "test:watch": "nodemon --watch contracts --watch test --watch .hardhat.config.js --watch package.json -e sol,js --exec \"npm run test\"",
+    "start:watch": "npm run test:watch",
     "dev": "npm run hardhat:compile",
     "dev:watch": "nodemon --watch contracts --watch .hardhat.config.js --watch package.json -e sol --exec \"npm run dev\"",
     "warn": "echo \"Deploying contracts to the blockchain. Continue?\" && npx -q press-any-key",

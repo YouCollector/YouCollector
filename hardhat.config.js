@@ -32,6 +32,8 @@ module.exports = {
     'polygon-mumbai': {
       url: process.env.ALCHEMY_API_URL,
       accounts: [process.env.PRIVATE_KEY],
+      gas: 21000000,
+      gasPrice: 8000000000,
     },
   },
   gasReporter: {
@@ -51,5 +53,8 @@ module.exports = {
     only: ['YouCollector*'],
     spacing: 2,
     pretty: true,
+  },
+  mocha: {
+    timeout: 0,
   },
 }
