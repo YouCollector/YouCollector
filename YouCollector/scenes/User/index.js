@@ -3,7 +3,6 @@ import { Box, HStack, Heading, Pressable, Text, Tooltip, useBreakpointValue } fr
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
-// import shortenAddress from '../../utils/shortenAddress'
 import YoutubeVideo from '../../components/YoutubeVideo'
 import MintButton from '../../components/MintButton'
 
@@ -118,7 +117,7 @@ function User({ navigation, route }) {
                         </Pressable>
                       </Tooltip>
                       <Tooltip
-                        label="Sell on Marketplace"
+                        label="Sell"
                         placement="top"
                       >
                         <Pressable
@@ -135,7 +134,7 @@ function User({ navigation, route }) {
                         </Pressable>
                       </Tooltip>
                       <Tooltip
-                        label="Sell on Marketplace"
+                        label="Burn"
                         placement="top"
                       >
                         <Pressable

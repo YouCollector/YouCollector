@@ -95,6 +95,20 @@ const theme = extendTheme({
         fontSize: 16,
       },
     },
+    Link: {
+      baseStyle: {
+        _text: {
+          color: 'primary.500',
+        },
+      },
+      variants: {
+        noColor: {
+          _text: {
+            color: 'inherit',
+          },
+        },
+      },
+    },
   },
 })
 

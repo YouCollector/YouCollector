@@ -45,6 +45,7 @@ function Landing({ navigation }) {
           or
         </Text>
         <Link
+          variant="noColor"
           marginTop={1}
           onPress={() => navigation.navigate('Claim')}
         >

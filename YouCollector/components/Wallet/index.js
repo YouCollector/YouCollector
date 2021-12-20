@@ -1,11 +1,11 @@
 import React, { useContext } from 'react'
-import { Pressable, Text, VStack } from 'native-base'
+import { Button, HStack } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
+import { MaterialIcons } from '@expo/vector-icons'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 import Balance from '../Balance'
 import MetamaskButton from '../MetamaskButton'
-import shortenAddress from '../../utils/shortenAddress'
 
 function Wallet() {
   const blockchainService = useContext(BlockchainServiceContext)
@@ -13,18 +13,22 @@ function Wallet() {
 
   if (blockchainService.userAddress) {
     return (
-      <Pressable
-        onPress={() => navigation.navigate('User', { address: blockchainService.userAddress })}
-        marginTop={-1}
-        marginBottom={-1}
-      >
-        <VStack alignItems="flex-end">
-          <Text>
-            {shortenAddress(blockchainService.userAddress)}
-          </Text>
-          <Balance />
-        </VStack>
-      </Pressable>
+      <HStack>
+        <Balance />
+        <Button
+          marginLeft={4}
+          onPress={() => navigation.navigate('User', { address: blockchainService.userAddress })}
+          leftIcon={(
+            <MaterialIcons
+              name="video-collection"
+              size={16}
+              color="white"
+            />
+          )}
+        >
+          My collection
+        </Button>
+      </HStack>
     )
   }
 

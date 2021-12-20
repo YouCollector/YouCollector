@@ -1,15 +1,15 @@
 import React, { useContext } from 'react'
-import { Box, HStack, Heading, Pressable, useBreakpointValue } from 'native-base'
+import { Box, Button, HStack, Heading, Input, Link, Pressable, useBreakpointValue } from 'native-base'
 import { getHeaderTitle } from '@react-navigation/elements'
 import { useNavigation } from '@react-navigation/native'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { MaterialIcons } from '@expo/vector-icons'
 
 import Wallet from '../Wallet'
 import MintButton from '../MintButton'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
-function Header(props) {
+function Header() {
   const blockchainService = useContext(BlockchainServiceContext)
   const navigation = useNavigation()
   const isLargeScreen = useBreakpointValue({
@@ -22,34 +22,56 @@ function Header(props) {
   return (
     <HStack
       alignItems="center"
+      justifyContent="space-between"
       p="4"
       minHeight="76px"
       borderBottomWidth="1"
       borderBottomColor="gray.200"
       backgroundColor="white"
     >
-      {!!false && (
-        <Box mr="2">
-          <MaterialCommunityIcons
-            name="arrow-left"
-            size={24}
-            color="black"
-            onPress={navigation.goBack}
-          />
-        </Box>
-      )}
-      <Pressable onPress={isLargeScreen ? () => navigation.navigate('Landing') : null}>
+      <Pressable onPress={() => navigation.navigate('Landing')}>
         <Heading>
-          {isLargeScreen ? 'YouCollector' : null}
+          YouCollector
         </Heading>
       </Pressable>
-      <Box flexGrow={1} />
-      <Wallet />
       {isLargeScreen && (
-        <Box ml={blockchainService.userAddress ? 4 : 0}>
-          <MintButton />
-        </Box>
+        <HStack alignItems="center">
+          <Link
+            marginLeft={4}
+            isUnderlined={false}
+            color="primary.500"
+            onPress={() => navigation.navigate('Marketplace')}
+          >
+            Marketplace
+          </Link>
+          <Input
+            size="lg"
+            width={256 + 64 + 16 + 4}
+            marginLeft={4}
+            placeholder="Search..."
+            InputLeftElement={(
+              <Box
+                color="muted.400"
+                marginLeft={2}
+              >
+                <MaterialIcons
+                  name="search"
+                  size={16}
+                  color="inherit"
+                />
+              </Box>
+            )}
+          />
+        </HStack>
       )}
+      <HStack alignItems="center">
+        <Wallet />
+        {isLargeScreen && (
+          <Box ml={blockchainService.userAddress ? 2 : 0}>
+            <MintButton />
+          </Box>
+        )}
+      </HStack>
     </HStack>
   )
 }
