@@ -1,6 +1,6 @@
 {
   "YouCollector": {
-    "address": "0xAe31266B048fF4327051225ec0a0f587688C1aC4",
+    "address": "0xF7bc175d8ee12eD958e97b97E061Ea0C6a4c767E",
     "abi": [
       "event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)",
       "function bidOnVideoId(string videoId) payable",
