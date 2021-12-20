@@ -5,7 +5,7 @@ import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Box, NativeBaseProvider, Text, extendTheme } from 'native-base'
+import { NativeBaseProvider, extendTheme } from 'native-base'
 import * as Linking from 'expo-linking'
 
 import shortenAddress from './utils/shortenAddress'
@@ -13,12 +13,12 @@ import shortenAddress from './utils/shortenAddress'
 import BlockchainServiceProvider from './components/BlockchainServiceProvider'
 import ApplicationLayout from './components/ApplicationLayout'
 import AuthenticationBouncer from './components/AuthenticationBouncer'
-import Header from './components/Header'
 
 import Landing from './scenes/Landing'
 import Register from './scenes/Register'
 import User from './scenes/User'
 import Mint from './scenes/Mint'
+import Watch from './scenes/Watch'
 
 const theme = extendTheme({
   colors: {
@@ -90,9 +90,9 @@ const theme = extendTheme({
     },
   },
   components: {
-    Button: {
+    Text: {
       baseStyle: {
-        // rounded: false,
+        fontSize: 16,
       },
     },
   },
@@ -106,6 +106,7 @@ const linking = {
       Register: 'register',
       User: '~/:address',
       Mint: 'mint',
+      Watch: '-/:videoId',
     },
   },
 }
@@ -136,6 +137,7 @@ export default function App() {
               header: () => null,
               contentStyle: {
                 backgroundColor: '#f9f9f9',
+                overflow: 'auto',
               },
             }}
           >
@@ -143,6 +145,11 @@ export default function App() {
               name="Landing"
               component={useApplicationLayout(Landing)}
               options={{ title: 'YouCollector' }}
+            />
+            <Stack.Screen
+              name="Watch"
+              component={useApplicationLayout(Watch)}
+              options={{ title: 'Watch' }}
             />
             <Stack.Screen
               name="Register"

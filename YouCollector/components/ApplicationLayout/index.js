@@ -1,18 +1,18 @@
 import React from 'react'
-import { VStack } from 'native-base'
+import { Box } from 'native-base'
 
 import Header from '../Header'
 
-function ApplicationLayout({ children }) {
+function ApplicationLayout({ children, ...props }) {
   return (
     <>
-      <Header />
-      <VStack
+      <Header {...props} />
+      <Box
         flex={1}
         p="4"
       >
         {children}
-      </VStack>
+      </Box>
     </>
   )
 }

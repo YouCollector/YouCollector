@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Box, Spinner } from 'native-base'
 
-function YoutubePlayer({ videoId, width = '100%' }) {
+function YoutubePlayer({ videoId, width = '100%', onLoad = () => null }) {
   const iframeRef = useRef()
   const [height, setHeight] = useState(400)
   const [isReady, setIsReady] = useState(false)
@@ -14,6 +14,7 @@ function YoutubePlayer({ videoId, width = '100%' }) {
 
   function handleLoad() {
     setIsReady(true)
+    onLoad()
   }
 
   return (

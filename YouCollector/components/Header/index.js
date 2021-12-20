@@ -1,20 +1,21 @@
 import React, { useContext } from 'react'
-import { Box, HStack, Heading, useBreakpointValue } from 'native-base'
+import { Box, HStack, Heading, Pressable, useBreakpointValue } from 'native-base'
 import { getHeaderTitle } from '@react-navigation/elements'
+import { useNavigation } from '@react-navigation/native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-import WalletConnector from '../WalletConnector'
+import Wallet from '../Wallet'
 import MintButton from '../MintButton'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
-function Header({ navigation, route, options, back }) {
-  // const blockchainService = useContext(BlockchainServiceContext)
-  // const isLargeScreen = useBreakpointValue({
-  //   base: false,
-  //   md: true,
-  // })
-  const isLargeScreen = true
+function Header(props) {
+  const blockchainService = useContext(BlockchainServiceContext)
+  const navigation = useNavigation()
+  const isLargeScreen = useBreakpointValue({
+    base: false,
+    md: true,
+  })
 
   console.log('isLargeScreen', isLargeScreen)
 
@@ -27,7 +28,7 @@ function Header({ navigation, route, options, back }) {
       borderBottomColor="gray.200"
       backgroundColor="white"
     >
-      {!!back && (
+      {!!false && (
         <Box mr="2">
           <MaterialCommunityIcons
             name="arrow-left"
@@ -37,13 +38,15 @@ function Header({ navigation, route, options, back }) {
           />
         </Box>
       )}
-      <Heading>
-        {isLargeScreen ? 'YouCollector' : getHeaderTitle(options, route.name)}
-      </Heading>
+      <Pressable onPress={isLargeScreen ? () => navigation.navigate('Landing') : null}>
+        <Heading>
+          {isLargeScreen ? 'YouCollector' : null}
+        </Heading>
+      </Pressable>
       <Box flexGrow={1} />
-      <WalletConnector />
+      <Wallet />
       {isLargeScreen && (
-        <Box ml={true ? 4 : 0}>
+        <Box ml={blockchainService.userAddress ? 4 : 0}>
           <MintButton />
         </Box>
       )}

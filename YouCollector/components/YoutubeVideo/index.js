@@ -1,19 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Box } from 'native-base'
 
 import Frame from '../Frame'
 import YoutubePlayer from '../YoutubePlayer'
 
-// https://codepen.io/chris22smith/pen/PbBwjp
-function YoutubeVideo({ videoId, width = 300 }) {
+function YoutubeVideo({ videoId, width = 300, frame = false }) {
+  const [isLoading, setIsLoading] = useState(frame)
 
-  return (
-    <Frame>
+  let node = (
+    <Box width={width}>
       <YoutubePlayer
         videoId={videoId}
-        width={width}
+        width="100%"
+        onLoad={() => setIsLoading(false)}
       />
-    </Frame>
+    </Box>
   )
+
+  if (frame) {
+    node = (
+      <Frame hidden={isLoading}>
+        {node}
+      </Frame>
+    )
+  }
+
+  return node
 }
 
 export default YoutubeVideo

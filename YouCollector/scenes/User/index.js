@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { Box, Heading, Text, useBreakpointValue } from 'native-base'
+import { Box, HStack, Heading, Pressable, Text, Tooltip, useBreakpointValue } from 'native-base'
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 // import shortenAddress from '../../utils/shortenAddress'
@@ -89,11 +90,69 @@ function User({ navigation, route }) {
               {row.map(videoId => (
                 <Box
                   key={videoId}
-                  marginBottom={12}
+                  marginBottom={isViewer ? 6 : 12}
                   marginLeft={6}
                   marginRight={6}
+                  alignItems="flex-end"
                 >
-                  <YoutubeVideo videoId={videoId} />
+                  <YoutubeVideo
+                    frame
+                    videoId={videoId}
+                  />
+                  {isViewer && (
+                    <HStack alignItems="flex-end">
+                      <Tooltip
+                        label="Watch"
+                        placement="top"
+                      >
+                        <Pressable
+                          marginTop={1}
+                          color="primary.500"
+                          onPress={() => navigation.navigate('Watch', { videoId })}
+                        >
+                          <MaterialCommunityIcons
+                            name="eye-outline"
+                            size={24}
+                            color="inherit"
+                          />
+                        </Pressable>
+                      </Tooltip>
+                      <Tooltip
+                        label="Sell on Marketplace"
+                        placement="top"
+                      >
+                        <Pressable
+                          marginTop={1}
+                          marginLeft={2}
+                          color="primary.500"
+                          onPress={() => navigation.navigate('Sell', { videoId })}
+                        >
+                          <MaterialIcons
+                            name="swap-horiz"
+                            size={24}
+                            color="inherit"
+                          />
+                        </Pressable>
+                      </Tooltip>
+                      <Tooltip
+                        label="Sell on Marketplace"
+                        placement="top"
+                      >
+                        <Pressable
+                          marginTop={1}
+                          marginLeft={2}
+                          color="primary.500"
+                          onPress={() => navigation.navigate('Burn', { videoId })}
+                        >
+                          <MaterialCommunityIcons
+                            name="fire"
+                            size={24}
+                            color="inherit"
+                          />
+                        </Pressable>
+                      </Tooltip>
+                    </HStack>
+                  )}
                 </Box>
               ))}
             </Box>

@@ -4,25 +4,27 @@ import { HStack, Image, VStack } from 'native-base'
 
 const size = 32
 
-const styles = StyleSheet.create({
-  corner: {
-    width: size,
-    height: size,
-  },
-  horizontal: {
-    resizeMode: 'stretch',
-    height: size,
-    flexGrow: 1,
-  },
-  vertical: {
-    resizeMode: 'stretch',
-    width: size,
-    flexGrow: 1,
-  },
-})
-
 // https://codepen.io/chris22smith/pen/PbBwjp
-function Frame({ children }) {
+function Frame({ children, hidden = false }) {
+  const styles = {
+    corner: {
+      width: size,
+      height: size,
+      visibility: hidden ? 'hidden' : 'visible',
+    },
+    horizontal: {
+      resizeMode: 'stretch',
+      height: size,
+      flexGrow: 1,
+      visibility: hidden ? 'hidden' : 'visible',
+    },
+    vertical: {
+      resizeMode: 'stretch',
+      width: size,
+      flexGrow: 1,
+      visibility: hidden ? 'hidden' : 'visible',
+    },
+  }
 
   return (
     <VStack>
