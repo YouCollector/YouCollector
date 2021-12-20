@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
-import { Box, Button, HStack, Heading, Input, Link, Pressable, useBreakpointValue } from 'native-base'
-import { getHeaderTitle } from '@react-navigation/elements'
+import { Box, HStack, Heading, Input, Link, Pressable, useBreakpointValue } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
 import { MaterialIcons } from '@expo/vector-icons'
 
@@ -16,8 +15,6 @@ function Header() {
     base: false,
     md: true,
   })
-
-  console.log('isLargeScreen', isLargeScreen)
 
   return (
     <HStack

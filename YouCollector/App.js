@@ -19,6 +19,7 @@ import Register from './scenes/Register'
 import User from './scenes/User'
 import Mint from './scenes/Mint'
 import Watch from './scenes/Watch'
+import Sell from './scenes/Sell'
 import Marketplace from './scenes/Marketplace'
 
 import theme from './theme'
@@ -32,6 +33,7 @@ const linking = {
       User: '~/:address',
       Mint: 'mint',
       Watch: '-/:videoId',
+      Sell: 'sell/:videoId',
       Marketplace: 'marketplace',
     },
   },
@@ -91,6 +93,11 @@ export default function App() {
               name="Mint"
               component={useAuthenticationBouncer(useApplicationLayout(Mint))}
               options={{ title: 'Mint video' }}
+            />
+            <Stack.Screen
+              name="Sell"
+              component={useAuthenticationBouncer(useApplicationLayout(Sell))}
+              options={{ title: 'Sell on Marketplace' }}
             />
             <Stack.Screen
               name="Marketplace"

@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Text, VStack } from 'native-base'
+import { Box, Text, VStack } from 'native-base'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
+
+import MetamaskButton from '../MetamaskButton'
 
 function AuthenticationBouncer({ children }) {
   const blockchainService = useContext(BlockchainServiceContext)
@@ -14,6 +16,9 @@ function AuthenticationBouncer({ children }) {
         alignItems="center"
       >
         <Text>You need to be logged into access this.</Text>
+        <Box marginTop={4}>
+          <MetamaskButton />
+        </Box>
       </VStack>
     )
   }

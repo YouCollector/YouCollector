@@ -32,6 +32,7 @@ function Balance() {
         fadeDuration={0}
         style={{ width: 18, height: 18 }}
         marginTop="2px"
+        alt="MATIC"
       />
     </HStack>
   )

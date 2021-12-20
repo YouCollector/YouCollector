@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Box, Button, HStack, Text, useBreakpointValue } from 'native-base'
+import { Button, HStack, Text } from 'native-base'
 
 import YoutubeVideo from '../../components/YoutubeVideo'
+import Container from '../../components/Container'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 import shortenAddress from '../../utils/shortenAddress'
@@ -12,14 +13,6 @@ function Watch({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(true)
 
   const { videoId } = route.params
-  // TODO create a container component
-  const width = useBreakpointValue({
-    base: 0,
-    sm: 480,
-    md: 768,
-    lg: 992,
-    xl: 1280,
-  })
 
   useEffect(() => {
     if (!blockchainService.initialized) return
@@ -32,11 +25,7 @@ function Watch({ navigation, route }) {
   }, [videoId, blockchainService])
 
   return (
-    <Box
-      width={width}
-      marginLeft="auto"
-      marginRight="auto"
-    >
+    <Container>
       <YoutubeVideo
         videoId={videoId}
         width="100%"
@@ -72,7 +61,7 @@ function Watch({ navigation, route }) {
           </>
         )}
       </HStack>
-    </Box>
+    </Container>
   )
 }
 

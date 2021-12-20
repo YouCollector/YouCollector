@@ -1,5 +1,5 @@
 import React from 'react'
-import { } from 'native-base'
+import { Box } from 'native-base'
 
 function Sell({ navigation, route }) {
   const { videoId } = route.params

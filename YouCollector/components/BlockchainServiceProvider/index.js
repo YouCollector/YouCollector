@@ -43,14 +43,11 @@ function BlockchainServiceProvider({ children }) {
 
       let tx = await (signed ? youCollectorSigned : youCollector)[functionName](...args, signed ? { value: ethers.utils.parseEther(value.toString()) } : {})
 
-      console.log('Waiting')
       if (signed) {
         tx = await tx.wait()
 
         setTransactionCount(await signer.getTransactionCount())
       }
-
-      console.log('tx', tx)
 
       return tx
     }
