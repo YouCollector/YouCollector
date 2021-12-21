@@ -14,7 +14,6 @@ function BlockchainServiceProvider({ children }) {
     console.log('Updating blockchain service', userAddress, transactionCount)
 
     // Init
-
     const provider = window.ethereum ? new ethers.providers.Web3Provider(window.ethereum) : null
     const signer = provider ? provider.getSigner() : null
     const youCollector = new ethers.Contract(contracts.YouCollector.address, contracts.YouCollector.abi, provider)
@@ -93,7 +92,7 @@ function BlockchainServiceProvider({ children }) {
       // Methods
       call,
       getBalance,
-      setUserAddress,
+      setUserAddress: x => setUserAddress(x.toLowerCase()),
       // Helpers
       parseBigNumber,
     })
