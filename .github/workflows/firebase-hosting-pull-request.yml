@@ -15,4 +15,4 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_YOUCOLLECTOR }}'
           projectId: youcollector
-          entryPoint: YouCollector
+          entryPoint: ./YouCollector
