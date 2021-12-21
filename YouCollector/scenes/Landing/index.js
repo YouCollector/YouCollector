@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Box, Button, Heading, Link, Text, VStack } from 'native-base'
+import { Alert, Box, Button, Heading, Link, Text } from 'native-base'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
@@ -51,6 +51,12 @@ function Landing({ navigation }) {
         >
           I'm a Youtuber, claim my videos
         </Link>
+        <Alert marginTop={6}>
+          This is an alpha version in active development. For inquiries or feedback, please open a discussion on GitHub.
+        </Alert>
+        <Alert marginTop={6}>
+          The alpha version uses the Polygon Mumbai Network blockchain. You can get some MATIC for free at a faucet.
+        </Alert>
       </Box>
     </>
   )

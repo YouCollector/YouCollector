@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, useBreakpointValue } from 'native-base'
 
-function Container({ children }) {
+function Container({ children, ...props }) {
   const width = useBreakpointValue({
     base: 0,
     sm: 480,
@@ -15,6 +15,7 @@ function Container({ children }) {
       width={width}
       marginLeft="auto"
       marginRight="auto"
+      {...props}
     >
       {children}
     </Box>

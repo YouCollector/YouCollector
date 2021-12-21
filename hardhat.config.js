@@ -5,7 +5,6 @@ require('@nomiclabs/hardhat-waffle')
 require('hardhat-gas-reporter')
 require('solidity-coverage')
 require('hardhat-contract-sizer')
-require('hardhat-abi-exporter')
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -43,14 +42,6 @@ module.exports = {
     disambiguatePaths: false,
     runOnCompile: true,
     strict: false,
-  },
-  abiExporter: {
-    path: './abis',
-    clear: true,
-    flat: true,
-    only: ['YouCollector*'],
-    spacing: 2,
-    pretty: true,
   },
   mocha: {
     timeout: 0,
