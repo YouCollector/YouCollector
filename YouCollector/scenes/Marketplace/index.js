@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { Box, Button, Heading, Link, Text, VStack } from 'native-base'
+import { Box, HStack, Heading, Pressable, Tooltip } from 'native-base'
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
@@ -38,12 +39,51 @@ function Marketplace({ navigation }) {
         justifyContent="flex-start"
         alignItems="flex-start"
       >
-        {marketplaceItems.map(marketplaceItem => (
-          <Box key={marketplaceItem.videoId}>
+        {marketplaceItems.map(({ videoId }) => (
+          <Box
+            key={videoId}
+            alignItems="flex-end"
+          >
             <YoutubeVideo
               frame
-              videoId={marketplaceItem.videoId}
+              videoId={videoId}
             />
+            <HStack
+              alignItems="flex-end"
+              marginTop={1}
+            >
+              <Tooltip
+                label="Watch"
+                placement="top"
+              >
+                <Pressable
+                  color="primary.500"
+                  onPress={() => navigation.navigate('Watch', { videoId })}
+                >
+                  <MaterialCommunityIcons
+                    name="eye-outline"
+                    size={24}
+                    color="inherit"
+                  />
+                </Pressable>
+              </Tooltip>
+              <Tooltip
+                label="Buy"
+                placement="top"
+              >
+                <Pressable
+                  marginLeft={2}
+                  color="primary.500"
+                  onPress={() => navigation.navigate('MarketplaceItem', { videoId })}
+                >
+                  <MaterialCommunityIcons
+                    name="cart-outline"
+                    size={24}
+                    color="inherit"
+                  />
+                </Pressable>
+              </Tooltip>
+            </HStack>
           </Box>
         ))}
       </Box>

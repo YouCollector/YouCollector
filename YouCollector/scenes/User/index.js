@@ -99,13 +99,15 @@ function User({ navigation, route }) {
                     videoId={videoId}
                   />
                   {isViewer && (
-                    <HStack alignItems="flex-end">
+                    <HStack
+                      alignItems="flex-end"
+                      marginTop={1}
+                    >
                       <Tooltip
                         label="Watch"
                         placement="top"
                       >
                         <Pressable
-                          marginTop={1}
                           color="primary.500"
                           onPress={() => navigation.navigate('Watch', { videoId })}
                         >
@@ -121,7 +123,6 @@ function User({ navigation, route }) {
                         placement="top"
                       >
                         <Pressable
-                          marginTop={1}
                           marginLeft={2}
                           color="primary.500"
                           onPress={() => navigation.navigate('Sell', { videoId })}
@@ -138,7 +139,6 @@ function User({ navigation, route }) {
                         placement="top"
                       >
                         <Pressable
-                          marginTop={1}
                           marginLeft={2}
                           color="primary.500"
                           onPress={() => navigation.navigate('Burn', { videoId })}

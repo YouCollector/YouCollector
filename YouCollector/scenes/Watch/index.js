@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Button, HStack, Text } from 'native-base'
 
 import YoutubeVideo from '../../components/YoutubeVideo'
@@ -10,19 +10,22 @@ import shortenAddress from '../../utils/shortenAddress'
 function Watch({ navigation, route }) {
   const blockchainService = useContext(BlockchainServiceContext)
   const [ownerAddress, setOwnerAddress] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const { videoId } = route.params
 
-  useEffect(() => {
+  const fetchOwnerAddress = useCallback(async () => {
     if (!blockchainService.initialized) return
 
-    blockchainService.call(false, 'videoIdToOwner', videoId)
-    .then(nextOwnerAddress => {
-      setOwnerAddress(nextOwnerAddress || null)
-      setIsLoading(false)
-    })
+    setIsLoading(true)
+
+    const nextOwnerAddress = await blockchainService.call(false, 'videoIdToOwner', videoId)
+
+    setOwnerAddress(nextOwnerAddress ? nextOwnerAddress.toLowerCase() : null)
+    setIsLoading(false)
   }, [videoId, blockchainService])
+
+  useEffect(fetchOwnerAddress, [fetchOwnerAddress])
 
   return (
     <Container>
@@ -35,9 +38,6 @@ function Watch({ navigation, route }) {
         justifyContent="flex-end"
         marginTop={2}
       >
-        {isLoading && (
-          <Text>Loading...</Text>
-        )}
         {!isLoading && (
           <>
             {!!ownerAddress && (

@@ -36,6 +36,7 @@ const linking = {
       Watch: '-/:videoId',
       Sell: 'sell/:videoId',
       Marketplace: 'marketplace',
+      MarketplaceItem: 'marketplace/:videoId',
     },
   },
 }

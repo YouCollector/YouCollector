@@ -182,9 +182,12 @@ function Sell({ navigation, route }) {
       </Heading>
       <Box
         alignItems="center"
-        marginTop={4}
+        marginTop={6}
       >
-        <YoutubeVideo videoId={videoId} />
+        <YoutubeVideo
+          videoId={videoId}
+          width={512}
+        />
       </Box>
       <Box
         marginTop={8}
