@@ -21,6 +21,7 @@ import Mint from './scenes/Mint'
 import Watch from './scenes/Watch'
 import Sell from './scenes/Sell'
 import Marketplace from './scenes/Marketplace'
+import MarketplaceItem from './scenes/MarketplaceItem'
 
 import theme from './theme'
 
@@ -91,18 +92,23 @@ export default function App() {
             />
             <Stack.Screen
               name="Mint"
-              component={useAuthenticationBouncer(useApplicationLayout(Mint))}
+              component={useApplicationLayout(useAuthenticationBouncer(Mint))}
               options={{ title: 'Mint video' }}
             />
             <Stack.Screen
               name="Sell"
-              component={useAuthenticationBouncer(useApplicationLayout(Sell))}
+              component={useApplicationLayout(useAuthenticationBouncer(Sell))}
               options={{ title: 'Sell on Marketplace' }}
             />
             <Stack.Screen
               name="Marketplace"
               component={useApplicationLayout(Marketplace)}
               options={{ title: 'Marketplace' }}
+            />
+            <Stack.Screen
+              name="MarketplaceItem"
+              component={useApplicationLayout(MarketplaceItem)}
+              options={{ title: 'Video for sale' }}
             />
           </Stack.Navigator>
         </NavigationContainer>

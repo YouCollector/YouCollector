@@ -56,11 +56,19 @@ function BlockchainServiceProvider({ children }) {
 
       const balance = await provider.getBalance(userAddress)
 
-      return parseBigNumber(balance)
+      return fromBigNumber(balance)
     }
 
-    function parseBigNumber(bigNumber) {
+    function fromBigNumber(bigNumber) {
       return ethers.utils.formatEther(bigNumber)
+    }
+
+    function toBigNumber(number) {
+      return ethers.utils.parseEther(number.toString())
+    }
+
+    function toNumber(bigNumber) {
+      return parseFloat(fromBigNumber(bigNumber))
     }
 
     setBlockchainService({
@@ -85,16 +93,18 @@ function BlockchainServiceProvider({ children }) {
       userAddress,
       transactionCount: nextTransactionCount || transactionCount,
       // blockain objects
-      provider,
-      signer,
-      youCollector,
-      youCollectorSigned,
+      // provider,
+      // signer,
+      // youCollector,
+      // youCollectorSigned,
       // Methods
       call,
       getBalance,
       setUserAddress: x => setUserAddress(x.toLowerCase()),
       // Helpers
-      parseBigNumber,
+      fromBigNumber,
+      toBigNumber,
+      toNumber,
     })
   }, [userAddress, transactionCount])
 

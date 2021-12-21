@@ -93,17 +93,12 @@ contract YouCollector is Ownable {
         GETTERS
     --- */
 
-    // function getVideoIdInfo(string memory videoId) external view returns (address owner, MarketplaceItem memory marketplaceItem) {
-    //     owner = videoIdToOwner[videoId];
-    //     marketplaceItem = videoIdToMarketplaceItem[videoId];
-    // }
-
     function getUserInfo(address userAddress) external view returns (string[] memory videoIds) {
         videoIds = ownerToVideoIds[userAddress];
     }
 
     function getMarketplaceItems(uint256 skip, uint256 sort) external view returns (MarketplaceItem[] memory marketplaceItems) {
-        return YouCollectorLibrary.getPaginatedMarketplaceItems(marketplaceItemsByDate, skip, sort);
+        marketplaceItems = YouCollectorLibrary.getPaginatedMarketplaceItems(marketplaceItemsByDate, skip, sort);
     }
 
     /* ---

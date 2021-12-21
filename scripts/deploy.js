@@ -27,7 +27,7 @@ async function main() {
   const contracts = {
     YouCollector: {
       address: youCollector.address,
-      abi: require('../abis/YouCollector.json'),
+      abi: require(path.resolve(__dirname, '../artifacts/contracts/YouCollector.sol/YouCollector.json')).abi,
     },
   }
 

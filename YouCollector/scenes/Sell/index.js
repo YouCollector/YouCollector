@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { Box, Heading, Text } from 'native-base'
+import { Box, FormControl, Heading, Input, Text } from 'native-base'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
@@ -10,6 +10,8 @@ function Sell({ navigation, route }) {
   const { videoId } = route.params
   const blockchainService = useContext(BlockchainServiceContext)
   const [owner, setOwner] = useState(null)
+  const [price, setPrice] = useState('')
+  const [bid, setBid] = useState('')
 
   const fetchOwner = useCallback(async () => {
     if (!blockchainService.initialized) return
@@ -25,7 +27,6 @@ function Sell({ navigation, route }) {
     return (
       <Text
         textAlign="center"
-        marginTop={4}
       >
         You are not the owner of this video.
       </Text>
@@ -34,7 +35,27 @@ function Sell({ navigation, route }) {
 
   function renderOwner() {
     return (
-      null
+      <Box>
+        <FormControl.Label>
+          Direct sale price (input 0 if you wish to sell only via bidding)
+        </FormControl.Label>
+        <Input
+          width={256 + 128}
+          value={price}
+          onChangeText={setPrice}
+        />
+        <FormControl.Label marginTop={4}>
+          Bidding start price (input 0 if you wish to sell only via direct sale)
+        </FormControl.Label>
+        <Input
+          width={256 + 128}
+          value={bid}
+          onChangeText={setBid}
+        />
+        <FormControl.Label marginTop={4}>
+          Closing date (must be at least tomorrow)
+        </FormControl.Label>
+      </Box>
     )
   }
 
@@ -52,7 +73,12 @@ function Sell({ navigation, route }) {
       >
         <YoutubeVideo videoId={videoId} />
       </Box>
-      {owner && blockchainService.userAddress === owner ? renderOwner() : renderNotOwner()}
+      <Box
+        marginTop={4}
+        alignItems="center"
+      >
+        {owner && blockchainService.userAddress === owner ? renderOwner() : renderNotOwner()}
+      </Box>
     </Container>
   )
 }

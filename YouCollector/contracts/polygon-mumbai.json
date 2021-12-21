@@ -1,27 +1,466 @@
 {
   "YouCollector": {
-    "address": "0xF7bc175d8ee12eD958e97b97E061Ea0C6a4c767E",
+    "address": "0xbA6B7379E01CcD14fB244081FAe6cB04A73bF76F",
     "abi": [
-      "event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)",
-      "function bidOnVideoId(string videoId) payable",
-      "function claimVideoId(string videoId)",
-      "function getMarketplaceItems(uint256 skip, uint256 sort) view returns (tuple[] marketplaceItems)",
-      "function getUserInfo(address userAddress) view returns (string[] videoIds)",
-      "function marketplaceItemsByDate(uint256) view returns (string videoId, address owner, address bidder, uint256 price, uint256 bid, uint256 bidCount, uint256 endDate)",
-      "function marketplaceItemsByPrice(uint256) view returns (string videoId, address owner, address bidder, uint256 price, uint256 bid, uint256 bidCount, uint256 endDate)",
-      "function mintMarketplaceItem(string videoId, uint256 price, uint256 bid, uint256 bidEndDate)",
-      "function mintVideoId(string videoId) payable",
-      "function owner() view returns (address)",
-      "function ownerToVideoIds(address, uint256) view returns (string)",
-      "function registerNewUser(string[] videoIds)",
-      "function renounceOwnership()",
-      "function setVideoIdMintingPrice(uint256 newPrice)",
-      "function setVideoIdTransferPlatformFee(uint256 newVideoIdTransferPlatformFee)",
-      "function transferOwnership(address newOwner)",
-      "function videoIdMintingPrice() view returns (uint256)",
-      "function videoIdToMarketplaceItem(string) view returns (string videoId, address owner, address bidder, uint256 price, uint256 bid, uint256 bidCount, uint256 endDate)",
-      "function videoIdToOwner(string) view returns (address)",
-      "function videoIdTransferPlatformFee() view returns (uint256)"
+      {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "previousOwner",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "videoId",
+            "type": "string"
+          }
+        ],
+        "name": "bidOnVideoId",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "videoId",
+            "type": "string"
+          }
+        ],
+        "name": "claimVideoId",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "skip",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "sort",
+            "type": "uint256"
+          }
+        ],
+        "name": "getMarketplaceItems",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "string",
+                "name": "videoId",
+                "type": "string"
+              },
+              {
+                "internalType": "address payable",
+                "name": "owner",
+                "type": "address"
+              },
+              {
+                "internalType": "address payable",
+                "name": "bidder",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "bid",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "bidCount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "endDate",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct MarketplaceItem[]",
+            "name": "marketplaceItems",
+            "type": "tuple[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "userAddress",
+            "type": "address"
+          }
+        ],
+        "name": "getUserInfo",
+        "outputs": [
+          {
+            "internalType": "string[]",
+            "name": "videoIds",
+            "type": "string[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "marketplaceItemsByDate",
+        "outputs": [
+          {
+            "internalType": "string",
+            "name": "videoId",
+            "type": "string"
+          },
+          {
+            "internalType": "address payable",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "address payable",
+            "name": "bidder",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bid",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bidCount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endDate",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "marketplaceItemsByPrice",
+        "outputs": [
+          {
+            "internalType": "string",
+            "name": "videoId",
+            "type": "string"
+          },
+          {
+            "internalType": "address payable",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "address payable",
+            "name": "bidder",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bid",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bidCount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endDate",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "videoId",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bid",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bidEndDate",
+            "type": "uint256"
+          }
+        ],
+        "name": "mintMarketplaceItem",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "videoId",
+            "type": "string"
+          }
+        ],
+        "name": "mintVideoId",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "ownerToVideoIds",
+        "outputs": [
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string[]",
+            "name": "videoIds",
+            "type": "string[]"
+          }
+        ],
+        "name": "registerNewUser",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "newPrice",
+            "type": "uint256"
+          }
+        ],
+        "name": "setVideoIdMintingPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "newVideoIdTransferPlatformFee",
+            "type": "uint256"
+          }
+        ],
+        "name": "setVideoIdTransferPlatformFee",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "videoIdMintingPrice",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "name": "videoIdToMarketplaceItem",
+        "outputs": [
+          {
+            "internalType": "string",
+            "name": "videoId",
+            "type": "string"
+          },
+          {
+            "internalType": "address payable",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "address payable",
+            "name": "bidder",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bid",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bidCount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endDate",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "name": "videoIdToOwner",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "videoIdTransferPlatformFee",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      }
     ]
   }
 }

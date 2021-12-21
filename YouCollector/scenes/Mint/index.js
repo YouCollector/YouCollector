@@ -26,20 +26,22 @@ function Mint({ navigation }) {
   const getVideoIdMintingPrice = useCallback(async () => {
     if (!blockchainService.initialized) return
 
-    setVideoIdMinitingPrice(parseFloat(blockchainService.parseBigNumber(await blockchainService.call(false, 'videoIdMintingPrice'))))
+    const nextVideoIdMintingPrice = await blockchainService.call(false, 'videoIdMintingPrice')
+
+    setVideoIdMinitingPrice(blockchainService.toNumber(nextVideoIdMintingPrice))
   }, [blockchainService])
 
   const getUserVideosIds = useCallback(async () => {
     if (!blockchainService.initialized) return
     if (!blockchainService.userAddress) return
 
-    setVideoIds(await blockchainService.call(false, 'getUserInfo', blockchainService.userAddress))
+    const nextVideoIds = await blockchainService.call(false, 'getUserInfo', blockchainService.userAddress)
+
+    setVideoIds(nextVideoIds)
   }, [blockchainService])
 
-  useEffect(() => {
-    getVideoIdMintingPrice()
-    getUserVideosIds()
-  }, [getVideoIdMintingPrice, getUserVideosIds])
+  useEffect(getVideoIdMintingPrice, [getVideoIdMintingPrice])
+  useEffect(getUserVideosIds, [getUserVideosIds])
 
   async function handlePreview() {
     setError(null)
