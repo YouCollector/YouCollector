@@ -7,7 +7,7 @@ import contracts from '../../contracts/polygon-mumbai.json'
 
 function BlockchainServiceProvider({ children }) {
   const [userAddress, setUserAddress] = useState(null)
-  const [transactionCount, setTransactionCount] = useState(0)
+  const [transactionCount, setTransactionCount] = useState(null)
   const [blockchainService, setBlockchainService] = useState({ initialized: false })
 
   const createBlockchainService = useCallback(async () => {
@@ -21,15 +21,19 @@ function BlockchainServiceProvider({ children }) {
     let youCollectorSigned = null
     let nextTransactionCount = 0
 
+    console.log('foo')
     if (signer) {
       youCollectorSigned = youCollector.connect(signer)
 
-      if (userAddress && !transactionCount) {
+      if (userAddress && transactionCount === null) {
+        console.log('bar')
         nextTransactionCount = await signer.getTransactionCount()
+        console.log('bar', nextTransactionCount)
 
         setTransactionCount(nextTransactionCount)
       }
     }
+    console.log('foo')
 
     async function call(value, functionName, ...args) {
       const signed = typeof value === 'number'
@@ -71,6 +75,8 @@ function BlockchainServiceProvider({ children }) {
       return parseFloat(fromBigNumber(bigNumber))
     }
 
+    console.log('userAddress', userAddress)
+
     setBlockchainService({
       initialized: true,
       // Blockchain info
@@ -80,9 +86,10 @@ function BlockchainServiceProvider({ children }) {
       blockchainCurrencyName: 'MATIC',
       blockchainCurrencySymbol: 'MATIC',
       blockchainRPCUrls: [
+        'https://rpc-mumbai.maticvigil.com', // ! Must be this one?
         // 'https://polygon-mumbai.g.alchemy.com/v2/mt4Sp-MMzfYTdbsn1NncLkQcZohoRK26',
+        'https://rpc-mumbai.matic.today',
         'https://matic-mumbai.chainstacklabs.com',
-        'https://rpc-mumbai.maticvigil.com',
         'https://matic-testnet-archive-rpc.bwarelabs.com',
       ],
       blockchainBlockExplorerUrl: 'https://mumbai.polygonscan.com',

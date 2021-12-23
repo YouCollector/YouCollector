@@ -60,8 +60,8 @@ function Marketplace({ navigation }) {
                   color="primary.500"
                   onPress={() => navigation.navigate('Watch', { videoId })}
                 >
-                  <MaterialCommunityIcons
-                    name="eye-outline"
+                  <MaterialIcons
+                    name="play-arrow"
                     size={24}
                     color="inherit"
                   />

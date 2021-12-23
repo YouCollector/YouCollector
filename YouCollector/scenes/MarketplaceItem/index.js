@@ -1,9 +1,11 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { Box, Button, Heading, Link, Text, VStack } from 'native-base'
+import { Box, Button, Heading, Link, Spinner, Text } from 'native-base'
 
 import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
-import YoutubeVideo from '../../components/YoutubeVideo'
+import VideoLayout from '../../components/VideoLayout'
+
+import shortenAddress from '../../utils/shortenAddress'
 
 function MarketplaceItem({ route, navigation }) {
   const { videoId } = route.params
@@ -20,30 +22,33 @@ function MarketplaceItem({ route, navigation }) {
 
   useEffect(fetchMarketplaceItem, [fetchMarketplaceItem])
 
+  console.log('marketplaceItem', marketplaceItem)
+
+  function renderContent() {
+    return (
+      <>
+        <Heading
+          size="xl"
+        >
+          This video is for sale
+        </Heading>
+        <Text marginTop={2}>
+          It belongs to <Link onPress={() => navigation.navigate('User', { address: marketplaceItem.owner })}>{shortenAddress(marketplaceItem.owner)}</Link>.
+        </Text>
+      </>
+    )
+  }
+
+  function renderNoContent() {
+    return (
+      <Spinner />
+    )
+  }
+
   return (
-    <>
-      <Heading
-        textAlign="center"
-        size="3xl"
-      >
-        Video for sale
-      </Heading>
-      <Box
-        alignItems="center"
-        marginTop={6}
-      >
-        <YoutubeVideo
-          videoId={videoId}
-          width={512}
-        />
-      </Box>
-      <Box
-        marginTop={8}
-        alignItems="center"
-      >
-        Foo
-      </Box>
-    </>
+    <VideoLayout videoId={videoId}>
+      {marketplaceItem ? renderContent() : renderNoContent()}
+    </VideoLayout>
   )
 }
 

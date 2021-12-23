@@ -7,10 +7,11 @@ import BlockchainServiceContext from '../../contexts/BlockchainServiceContext'
 
 import LargeButton from '../../components/LargeButton'
 import MetamaskButton from '../../components/MetamaskButton'
+import Container from '../../components/Container'
 
 function Register({ navigation }) {
-  // const [step, setStep] = useState('metamask')
-  const [step, setStep] = useState(window.ethereum?.isMetaMask ? 'auth' : 'metamask')
+  const [step, setStep] = useState('metamask')
+  // const [step, setStep] = useState(window.ethereum?.isMetaMask ? 'auth' : 'metamask')
   const [isInstallingMetamask, setIsInstallingMetamask] = useState(false)
   const [urls, setUrls] = useState([])
   const blockchainService = useContext(BlockchainServiceContext)
@@ -48,129 +49,106 @@ function Register({ navigation }) {
   }
 
   return (
-    <Box alignItems="center">
-      <Heading
-        fontSize="6xl"
-        marginTop={16}
-      >
-        You're about to begin your collecting journey...
-      </Heading>
-      {step === 'start' && (
-        <>
-          <Heading
-            fontSize="4xl"
-            color="primary.500"
-            marginTop={16}
-          >
-            Choose wisely
-          </Heading>
-          <LargeButton
-            onPress={() => setStep('auth')}
-            marginTop={8}
-          >
-            I have Metamask
-          </LargeButton>
-          <Text marginTop={4}>
-            or
-          </Text>
-          <LargeButton
-            onPress={() => setStep('metamask')}
-            marginTop={4}
-          >
-            I don't know what Metamask is
-          </LargeButton>
-        </>
-      )}
-      {step === 'auth' && (
-        <>
-          <Heading
-            fontSize="4xl"
-            color="primary.500"
-            marginTop={16}
-          >
-            I see you have Metamask installed
-          </Heading>
-          <Box marginTop={8}>
-            <MetamaskButton
-              large
-              onConnect={() => setStep('buy')}
-            />
-          </Box>
-        </>
-      )}
-      {step === 'metamask' && (
-        <>
-          <Heading
-            fontSize="4xl"
-            color="primary.500"
-            marginTop={16}
-          >
-            YouCollector is based on a blockchain
-          </Heading>
-          <Text marginTop={4}>
-            Yeah, you heard right, just like Bitcoin, but with a twist.
-          </Text>
-          <Text>
-            To connect and collect or trade, you need a cryptocurrency wallet, called Metamask.
-          </Text>
-          <Text>
-            It's a simple program that stores digital currencies for you and keeps them safe.
-          </Text>
-          <Text marginTop={4}>
-            Go for it, it's free.
-          </Text>
-          {!isInstallingMetamask && (
-            <LargeButton
-              marginTop={8}
-              onPress={() => {
-                setIsInstallingMetamask(true)
-                Linking.openURL('https://metamask.io/')
-              }}
-            >
-              Install the Metamask browser extension
-            </LargeButton>
+    <Container>
 
-          )}
-          {isInstallingMetamask && (
-            <LargeButton
-              marginTop={8}
+      <Box alignItems="center">
+        <Heading
+          fontSize="6xl"
+          marginTop={16}
+        >
+          You're about to begin your collecting journey...
+        </Heading>
+        {step === 'metamask' && (
+          <>
+            <Heading
+              fontSize="4xl"
+              color="primary.500"
+              marginTop={16}
+            >
+              YouCollector is based on a blockchain
+            </Heading>
+            <Text marginTop={4}>
+              Yeah, you heard right, just like Bitcoin, but with a twist.
+            </Text>
+            <Text>
+              To connect and collect or trade, you need a cryptocurrency wallet, called Metamask.
+            </Text>
+            <Text>
+              It's a simple program that stores digital currencies for you and keeps them safe.
+            </Text>
+            <Text marginTop={4}>
+              Go for it, it's free.
+            </Text>
+            {!isInstallingMetamask && (
+              <LargeButton
+                marginTop={8}
+                onPress={() => {
+                  setIsInstallingMetamask(true)
+                  Linking.openURL('https://metamask.io/')
+                }}
+              >
+                Install the Metamask browser extension
+              </LargeButton>
+
+            )}
+            {isInstallingMetamask && (
+              <LargeButton
+                marginTop={8}
+                onPress={() => window.location.reload()}
+              >
+                I have installed Metamask on my browser
+              </LargeButton>
+            )}
+            <Text marginTop={4}>
+              or
+            </Text>
+            <Link
+              marginTop={4}
               onPress={() => window.location.reload()}
             >
-              I have installed Metamask on my browser
-            </LargeButton>
-          )}
-          <Text marginTop={4}>
-            or
-          </Text>
-          <Link
-            marginTop={4}
-            onPress={() => setStep('start')}
-          >
-            Go back
-          </Link>
-        </>
-      )}
-      {step === 'buy' && (
-        <>
-          <Heading
-            fontSize="4xl"
-            color="primary.500"
-            marginTop={16}
-          >
-            Time to get serious
-          </Heading>
-          <Text marginTop={4}>
-            In order to use YouCollector, you need to buy a cryptocurrency: MATIC.
-          </Text>
-          <Text>
-            With MATIC in your wallet, you will be able to perform transactions on the blockchain.
-          </Text>
-          <Text>
-            So go ahead and buy some
-          </Text>
-        </>
-      )}
-    </Box>
+              I installed it, reload the page
+            </Link>
+          </>
+        )}
+        {step === 'auth' && (
+          <>
+            <Heading
+              fontSize="4xl"
+              color="primary.500"
+              marginTop={16}
+            >
+              I see you have Metamask installed
+            </Heading>
+            <Box marginTop={8}>
+              <MetamaskButton
+                large
+                onConnect={() => setStep('buy')}
+              />
+            </Box>
+          </>
+        )}
+        {step === 'buy' && (
+          <>
+            <Heading
+              fontSize="4xl"
+              color="primary.500"
+              marginTop={16}
+            >
+              Time to get serious
+            </Heading>
+            <Text marginTop={4}>
+              In order to use YouCollector, you need to buy a cryptocurrency: MATIC.
+            </Text>
+            <Text>
+              With MATIC in your wallet, you will be able to perform transactions on the blockchain.
+            </Text>
+            <Text>
+              So go ahead and buy some
+            </Text>
+          </>
+        )}
+      </Box>
+    </Container>
   )
 }
 
