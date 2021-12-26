@@ -1,5 +1,20 @@
 # To do
 
+- Create an oracle for MATIC price
+- Offer plans to buy some MATIC
+- Create backend
+- Use stripe to sell MATIC
+- Create YouCollector token
+- Refactor contract to be standard
+- Sell yoken alongside with MATIC
+- Create some features
+
+# Doing
+
+
+# Done
+
+- Decide on which blockchain to use
 - Get some coins from a faucet
 - Add metamask support to front end
 - Create solidity development suite
@@ -15,9 +30,3 @@
 - Adapt collection page
 - Create web landing page
 - Create mobile landing page
-
-# Doing
-
-- Decide on which blockchain to use
-
-# Done

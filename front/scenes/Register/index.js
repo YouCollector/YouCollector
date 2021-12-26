@@ -10,8 +10,8 @@ import MetamaskButton from '../../components/MetamaskButton'
 import Container from '../../components/Container'
 
 function Register({ navigation }) {
-  const [step, setStep] = useState('metamask')
-  // const [step, setStep] = useState(window.ethereum?.isMetaMask ? 'auth' : 'metamask')
+  // const [step, setStep] = useState('metamask')
+  const [step, setStep] = useState(window.ethereum?.isMetaMask ? 'auth' : 'metamask')
   const [isInstallingMetamask, setIsInstallingMetamask] = useState(false)
   const [urls, setUrls] = useState([])
   const blockchainService = useContext(BlockchainServiceContext)
@@ -50,7 +50,6 @@ function Register({ navigation }) {
 
   return (
     <Container>
-
       <Box alignItems="center">
         <Heading
           fontSize="6xl"

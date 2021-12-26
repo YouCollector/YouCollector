@@ -1,23 +1,11 @@
 {
+  "private": true,
   "name": "youcollector",
   "version": "0.0.0",
-  "description": "YouCollector multi devices decentralised app",
-  "main": "index.js",
+  "description": "Collect and Trade YouTube Videos",
+  "main": "README.md",
   "scripts": {
-    "test": "npx hardhat test --network hardhat",
-    "test:watch": "nodemon --watch contracts --watch test --watch .hardhat.config.js --watch package.json -e sol,js --exec \"npm run test\"",
-    "start:watch": "npm run test:watch",
-    "dev": "npm run hardhat:compile",
-    "dev:watch": "nodemon --watch contracts --watch .hardhat.config.js --watch package.json -e sol --exec \"npm run dev\"",
-    "warn": "echo \"Deploying contracts to the blockchain. Continue?\" && npx -q press-any-key",
-    "deploy": "npm run warn && npm run hardhat:deploy && npm run hardhat:setVideoIdMintingPrice",
-    "hardhat:clean": "rm -rf artifacts cache",
-    "hardhat:compile": "npx hardhat compile",
-    "hardhat:size": "npx hardhat size-contracts",
-    "hardhat:accounts": "npx hardhat accounts",
-    "hardhat:deploy": "npx hardhat run ./scripts/deploy.js",
-    "hardhat:setVideoIdMintingPrice": "npx hardhat run ./scripts/setVideoIdMintingPrice.js",
-    "hardhat:getFromFaucet": "npx hardhat run ./scripts/getFromFaucet.js"
+    "test": ""
   },
   "repository": {
     "type": "git",
@@ -30,23 +18,8 @@
   },
   "homepage": "https://github.com/YouCollector/YouCollector#readme",
   "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.0.3",
-    "@nomiclabs/hardhat-etherscan": "^2.1.8",
-    "@nomiclabs/hardhat-waffle": "^2.0.1",
-    "@openzeppelin/contracts": "^4.4.1",
-    "@openzeppelin/contracts-upgradeable": "^4.4.1",
     "babel-eslint": "^10.1.0",
-    "chai": "^4.3.4",
-    "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
-    "eslint-config-dherault": "^1.6.0",
-    "ethereum-waffle": "^3.4.0",
-    "ethers": "^5.5.2",
-    "hardhat": "^2.8.0",
-    "hardhat-contract-sizer": "^2.3.0",
-    "hardhat-gas-reporter": "^1.0.6",
-    "nodemon": "^2.0.15",
-    "solhint": "^3.3.6",
-    "solidity-coverage": "^0.7.17"
+    "eslint-config-dherault": "^1.6.0"
   }
 }
