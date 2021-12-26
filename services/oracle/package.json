@@ -1,11 +1,24 @@
 {
-  "name": "oracle",
+  "private": true,
+  "name": "youcollector-oracle-service",
+  "description": "",
   "version": "0.0.0",
-  "description": "An oracle",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "license": "MIT",
   "author": "David Hérault <dherault@gmail.com> (https://github.com/dherault)",
-  "license": "MIT"
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "start:watch": "nodemon --exec \"npm start\"",
+    "deploy": "gcloud app deploy",
+    "test": "mocha --exit test/*.test.js"
+  },
+  "dependencies": {
+    "dexters": "^0.2.0",
+    "firebase-admin": "^10.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
 }

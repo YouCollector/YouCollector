@@ -1,5 +1,6 @@
 import 'react-native-get-random-values'
 import '@ethersproject/shims'
+import './analytics'
 
 import React from 'react'
 import { StatusBar } from 'expo-status-bar'
